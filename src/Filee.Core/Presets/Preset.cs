@@ -132,6 +132,9 @@ public sealed class Preset
     /// <summary>Options used for local AI image upscaling.</summary>
     public UpscaleOptions Upscale { get; set; } = new();
 
+    /// <summary>Options for rendering a web page and slicing it into pictures (<see cref="SlicesWebPage"/>).</summary>
+    public WebOptions Web { get; set; } = new();
+
     /// <summary>
     /// "Metadata": the fields its window changes, on the conversion it starts (<see cref="MetadataTool"/>); null for
     /// every other preset. Only an engine that writes metadata and nothing else applies it
@@ -142,6 +145,18 @@ public sealed class Preset
     /// <summary>The conversion changes the file's metadata (<see cref="Metadata"/>).</summary>
     [JsonIgnore]
     public bool EditsMetadata => Metadata is { IsEmpty: false };
+
+    /// <summary>
+    /// True when the preset renders a web page with a real browser and cuts the picture into slices
+    /// (<see cref="WebOptions.SliceRatio"/>): only such a job may take a
+    /// <see cref="Conversion.ConversionEdge.WebPage"/> edge.
+    /// </summary>
+    [JsonIgnore]
+    public bool SlicesWebPage => Web.SliceRatio.Length > 0 && TargetFormat == "png";
+
+    /// <summary>True when a <paramref name="sourceFormat"/> file is a web page this preset slices.</summary>
+    public bool SlicesWebPageOf(string sourceFormat) =>
+        SlicesWebPage && (sourceFormat == "html" || sourceFormat == "mhtml");
 
     /// <summary>Where and how output files are written.</summary>
     public OutputRule Output { get; set; } = new();
@@ -402,6 +417,7 @@ public sealed class Preset
         Cad = Cad.Clone(),
         Translate = Translate.Clone(),
         Upscale = Upscale.Clone(),
+        Web = Web.Clone(),
         Metadata = Metadata?.Clone(),
         Output = Output.Clone(),
         Kind = Kind,

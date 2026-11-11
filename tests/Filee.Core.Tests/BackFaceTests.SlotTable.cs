@@ -15,6 +15,7 @@ public partial class BackFaceTests
         ["spreadsheets"] = (["to-pdf", "to-xlsx", "to-csv", "to-hwpx", "to-hwp", "merge-pdf"], ["tool-sheet-studio", "to-docx", "to-vcf", "to-ics", "zip-all"]),
         ["presentations"] = (["to-pdf", "to-png", "to-jpg", "to-pptx", "to-hwpx", "to-hwp", "merge-pdf"], ["to-odp", "pdf-long-image", "to-docx", "zip-all"]),
         ["hwp"] = (["to-pdf", "to-docx", "to-hwpx", "to-hwp", "to-png", "to-txt", "merge-pdf"], ["to-html", "to-odt", "pdf-long-image", "zip-all"]),
+        ["web"] = (["web-slice"], ["to-pdf", "to-docx", "to-txt", "to-md", "to-epub", "zip-all"]),
         ["text"] = (["to-pdf", "to-hwpx", "to-hwp", "to-docx", "to-html", "to-txt"], ["translate", "to-md", "to-odt", "merge-pdf", "zip-all"]),
         ["ebooks"] = (["to-pdf", "to-epub", "to-docx", "to-txt", "to-azw3", "to-kepub"], ["translate", "to-md", "zip-all"]),
         ["video"] = (["to-mp4", "mp4-720", "to-mov", "to-gif", "to-mp3", "caption-video"], ["tool-clip", "crop-video", "compress-video", "merge-videos", "remove-metadata", "mp4-av1", "extract-frames-png", "zip-all"]),
@@ -46,6 +47,19 @@ public partial class BackFaceTests
 
     private static IEnumerable<char> WorkOf(string donut, string id, Dictionary<string, Preset> presets)
     {
+        // "Web page slices" is a group of conversions (HTML → PNG by ratio), not a group of edits.
+        if (id == "web-slice")
+        {
+            foreach (var child in presets[id].SubPresetIds)
+            {
+                Assert.StartsWith("web-png-", child);
+                Assert.False(presets[child].IsGroup);
+                Assert.True(presets[child].SlicesWebPage);
+                yield return 'V';
+            }
+            yield break;
+        }
+
         if (presets[id].IsGroup)
         {
             // The built-in groups in the table contain only edits, including every leaf.

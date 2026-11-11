@@ -1,7 +1,6 @@
 {
   "app.name": "Filee",
   "app.tagline": "Glissez, déposez, c'est converti.",
-
   "fields.title": "Domaines",
   "fields.description": "Désactivez les domaines dans lesquels vous ne travaillez pas. Un format appartenant uniquement à des domaines désactivés n'apparaît pas dans les tranches du menu circulaire, dans « Préréglages disponibles » de Paramètres → Menu circulaire, dans la liste de Paramètres → Préréglages ni dans la liste « Convertir en » d'un préréglage. Filee reconnaît toujours ses fichiers et la ligne de commande peut toujours convertir vers ce format ; un fichier déposé propose toujours les formats de ses propres domaines.",
   "fields.formats": "Formats : {0}",
@@ -18,7 +17,6 @@
   "fields.name.video-pro": "Production vidéo et diffusion",
   "fields.name.audio-pro": "Audio professionnel",
   "fields.name.legacy": "Anciens formats",
-
   "nav.home": "Accueil",
   "nav.general": "Général",
   "nav.triggers": "Raccourcis",
@@ -32,7 +30,6 @@
   "nav.collapse": "Réduire la barre latérale",
   "nav.expand": "Développer la barre latérale",
   "nav.page_error": "Impossible d'ouvrir cette page. Les détails figurent dans le journal.",
-
   "tray.open": "Ouvrir Filee",
   "tray.pause": "Suspendre les raccourcis",
   "tray.resume": "Réactiver les raccourcis",
@@ -44,7 +41,6 @@
   "close.tray": "Garder en arrière-plan",
   "close.quit": "Quitter",
   "close.dont_ask": "Ne plus demander",
-
   "home.title": "Accueil",
   "home.drop_title": "Déposez des fichiers ici",
   "home.drop_select": "Double-cliquez pour sélectionner des fichiers",
@@ -73,7 +69,6 @@
   "home.undone": "Annulé : les résultats sont dans la Corbeille",
   "home.undone_original": "Annulé : les résultats sont dans la Corbeille, tout comme les originaux qu'ils avaient remplacés",
   "home.undo_failed": "Impossible de déplacer {0} dans la Corbeille : {1}",
-
   "donut.center_drag": "Amenez les fichiers ici",
   "donut.files_same": "{0} × {1}",
   "donut.files_mixed": "{0} fichiers",
@@ -89,7 +84,6 @@
   "donut.group_caption": "{0} options",
   "donut.flip_to_back": "{0} verso",
   "donut.flip_to_front": "{0} recto",
-
   "toast.converting": "{0} → {1}",
   "toast.done": "Terminé",
   "toast.done_errors": "{0} sur {1} en échec",
@@ -102,7 +96,6 @@
   "toast.get_fonts": "Obtenir les polices",
   "download.badge": "{0}/s · {1}",
   "download.badge_files": "{0} · {1} sur {2} fichiers",
-
   "error.unsupported_source": "Ce type de fichier n'est pas pris en charge",
   "error.empty_file": "Le fichier est vide (0 octet). Un fichier créé avec « Nouveau » dans le menu contextuel reste vide tant que vous ne l'avez pas ouvert et enregistré dans son application",
   "error.p7m_unreadable": "Ce n'est pas un fichier signé .p7m que Filee peut ouvrir, ou il est endommagé",
@@ -207,7 +200,6 @@
   "notice.geo_shapefile_split": "Un Shapefile ne contient qu'un type de forme : les points, lignes et polygones ont été enregistrés dans des fichiers distincts",
   "notice.geo_heights_dropped": "Certains points n'ont pas de hauteur et Shapefile ne peut pas en omettre une seule : toutes les hauteurs ont donc été omises",
   "notice.osm_incomplete": "Certaines lignes et surfaces utilisent des points absents du fichier (un extrait découpé) : elles ont été omises",
-
   "engine.reason.not_installed": "Non installé",
   "engine.reason.error": "Erreur lors de la vérification",
   "engine.reason.unsupported_platform": "Non disponible sur cette plateforme",
@@ -274,7 +266,6 @@
   "engine.libreoffice.description": "Lit les formats anciens et moins courants : DOC, PPT, Pages, Keynote, Numbers, WordPerfect, ClarisWorks, Publisher, Visio…\nEnregistre aussi en DOC, XLS, PPT, ODT, ODP, modèles OpenDocument et EMF.",
   "engine.translator.description": "Traduit les documents et livres électroniques localement à l'aide de modèles Ollama hors ligne.\nTraduit aussi les sous-titres SRT et WebVTT : seul le texte des répliques est envoyé au modèle, les numéros et les horodatages sont conservés.",
   "engine.exiftool.description": "Lit tous les champs de métadonnées des images, PDF, vidéos et sons, et les modifie dans la plupart des types de fichiers sans toucher au contenu.\nUtilisé par l'outil Métadonnées ; sans lui, les champs sont en lecture seule.",
-
   "profile.images": "Images",
   "profile.pdf": "PDF",
   "profile.office": "Documents",
@@ -294,7 +285,6 @@
   "profile.models": "Modèles 3D",
   "profile.geo": "Géospatial",
   "profile.mixed": "Fichiers mixtes",
-
   "preset.crop": "Recadrer",
   "crop.save": "Recadrer et enregistrer",
   "crop.reset": "Réinitialiser",
@@ -422,7 +412,6 @@
   "clip.silence_removed": "Silences retirés : {0}",
   "clip.no_silence": "Aucun silence trouvé",
   "clip.cannot_play": "Impossible de lire l'extrait",
-
   "preset.half_size": "Taille 50 %",
   "preset.half_size.donut": "Taille 50 %",
   "preset.image_edit": "Modifier les images",
@@ -542,7 +531,6 @@
   "preset.merge_audio": "Fusionner l'audio",
   "preset.merge_images": "Fusionner les images",
   "preset.remove_metadata": "Supprimer les métadonnées",
-
   "format.folder": "Dossier",
   "format.category.Image": "Image",
   "format.category.Pdf": "PDF",
@@ -562,7 +550,6 @@
   "format.category.Data": "Données",
   "format.category.Model3D": "Modèle 3D",
   "format.category.Geo": "Géospatial",
-
   "general.title": "Général",
   "general.language": "Langue",
   "general.language_auto": "Langue du système",
@@ -653,7 +640,6 @@
   "general.library_note": "Vos autres réglages ne changent pas.",
   "general.reset_confirm": "Remplacer tous les préréglages et profils de menu circulaire par ceux par défaut ?",
   "general.imported": "{0} éléments importés",
-
   "triggers.title": "Raccourcis",
   "triggers.description": "Choisissez comment s'ouvre le menu circulaire. Vous pouvez ajouter autant de gestes que vous voulez.",
   "triggers.macos_permissions": "Autorisez Filee dans Réglages Système > Confidentialité et sécurité > Accessibilité.\nSi Filee est déjà activé mais que les gestes ne démarrent pas, supprimez-le avec − puis ajoutez-le à nouveau avec +.\nLe Finder demande aussi l'autorisation d'automatisation la première fois que vous utilisez un raccourci sur la sélection.",
@@ -715,7 +701,6 @@
   "triggers.excluded_none_running": "Aucune autre application n'a de fenêtre ouverte.",
   "triggers.excluded_note": "Les gestes et raccourcis sont sans effet quand le pointeur survole ces applications.",
   "triggers.paused": "Raccourcis en pause",
-
   "toolbar.title": "Menu circulaire",
   "toolbar.step_profile": "1. Choisir un profil",
   "toolbar.step_arrange": "2. Organiser les préréglages",
@@ -784,18 +769,17 @@
   "toolbar.mixed_covered": "« {0} » est placé avant et accepte toutes les extensions cochées ici : ce profil n'est donc jamais utilisé.",
   "toolbar.mixed_others": "Les autres mélanges de fichiers ouvrent « {0} ».",
   "toolbar.mixed_others_self": "Il ne reste aucun profil mixte sans case cochée : celui-ci sert donc aussi pour tous les autres mélanges.",
-   "toolbar.chip_tip.makes": "→ {0} · {1}",
-   "toolbar.chip_tip.makes_same": "→ Même format",
-   "toolbar.chip_tip.makes_name": "→ {0}",
-   "toolbar.chip_tip.works_with": "Formats acceptés : {0}",
-   "toolbar.chip_tip.kind": "{0} ({1})",
-   "toolbar.chip_tip.name_separator": ", ",
-   "toolbar.chip_tip.names_more": "{0} +{1}",
-   "toolbar.chip_tip.more_shift": "+{0} en plus · Shift pour tout afficher",
-   "toolbar.chip_tip.shift_all": "Shift pour tout afficher",
-   "toolbar.chip_tip.any_file": "Tout fichier",
-   "tags.remove": "Retirer",
-
+  "toolbar.chip_tip.makes": "→ {0} · {1}",
+  "toolbar.chip_tip.makes_same": "→ Même format",
+  "toolbar.chip_tip.makes_name": "→ {0}",
+  "toolbar.chip_tip.works_with": "Formats acceptés : {0}",
+  "toolbar.chip_tip.kind": "{0} ({1})",
+  "toolbar.chip_tip.name_separator": ", ",
+  "toolbar.chip_tip.names_more": "{0} +{1}",
+  "toolbar.chip_tip.more_shift": "+{0} en plus · Shift pour tout afficher",
+  "toolbar.chip_tip.shift_all": "Shift pour tout afficher",
+  "toolbar.chip_tip.any_file": "Tout fichier",
+  "tags.remove": "Retirer",
   "presets.title": "Préréglages",
   "presets.add": "Nouveau",
   "presets.add_empty": "Préréglage vide",
@@ -1177,7 +1161,6 @@
   "presets.delete_confirm": "Supprimer « {0} » ? Il sera aussi retiré de tous les menus circulaires et groupes.",
   "presets.name_required": "Saisissez un nom",
   "presets.select": "Sélectionnez un préréglage pour le modifier",
-
   "theme.title": "Thème",
   "theme.style": "Style de thème",
   "theme.style.Soft": "Filee Soft",
@@ -1216,7 +1199,6 @@
   "theme.preview": "Aperçu",
   "theme.preview_toggle": "Interrupteur d'exemple (aperçu uniquement, pas un réglage)",
   "theme.preview_toggle_hint": "Montre l'apparence des interrupteurs avec ce thème. Ne modifie aucun réglage.",
-
   "engines.title": "Moteurs de conversion",
   "engines.description": "Filee choisit le meilleur moteur disponible pour chaque conversion.\nQuand plusieurs peuvent faire le même travail, le plus haut l'emporte.",
   "engines.available": "Prêt",
@@ -1308,7 +1290,6 @@
   "engines.copy_links": "Copier les liens de téléchargement",
   "engines.links_copied": "Les liens de téléchargement sont dans le presse-papiers. Téléchargez les fichiers sur un ordinateur connecté à internet, puis choisissez ici Hors ligne → Installer à partir de fichiers téléchargés.",
   "engines.state.copying": "Copie {0} %",
-
   "about.title": "À propos",
   "about.updates": "Mises à jour",
   "common.search": "Rechercher",
@@ -1333,7 +1314,6 @@
   "feedback.notice_text": "Une étoile sur GitHub aide d'autres personnes à découvrir Filee.\nLes problèmes et les idées sont aussi les bienvenus.",
   "feedback.star": "Étoile sur GitHub",
   "feedback.issue": "Signaler un problème ou une idée",
-
   "common.ok": "OK",
   "common.cancel": "Annuler",
   "common.save": "Enregistrer",
@@ -1343,7 +1323,6 @@
   "common.no": "Non",
   "common.on": "Activé",
   "common.off": "Désactivé",
-
   "setup.title": "Choisir les moteurs de conversion",
   "setup.description": "Images, PDF, documents Office, HWP, livres numériques, archives, polices, CAO et modèles 3D se convertissent déjà.\nNe téléchargez des moteurs que pour la vidéo, l'audio ou les formats rares.",
   "setup.note": "Vous pouvez installer ou supprimer des moteurs à tout moment dans Paramètres → Moteurs.",
@@ -1510,7 +1489,6 @@
   "watch.status_starting": "Démarrage…",
   "watch.status_error": "Impossible de surveiller ce dossier : {0}",
   "watch.cli_hint": "Aussi en ligne de commande : filee watch <folder> --to <format>",
-
   "preset.sheet_studio": "PDF + Modifier",
   "sheet_studio.title": "Atelier d’impression des feuilles de calcul",
   "sheet_studio.sheets": "Feuilles et ordre de sortie",
@@ -1550,7 +1528,6 @@
   "sheet_studio.apply_fix": "Appliquer la mise en page suggérée",
   "sheet_studio.add_region": "+ Ajouter une autre zone",
   "sheet_studio.region_name": "{0} · zone {1}",
-
   "whats_new.title": "Nouveautés de Filee {0}",
   "whats_new.previous": "Précédent",
   "whats_new.next": "Suivant",
@@ -1646,7 +1623,6 @@
   "engine.iso.description": "Crée des images ISO à partir de dossiers ou du contenu des archives, en conservant les noms Unicode et les dossiers vides.",
   "preset.iso_image": "Image ISO",
   "profile.folders": "Dossiers",
-
   "preset.upscale": "Mettre à l'échelle l'image",
   "preset.upscale.donut": "Mettre à l'échelle",
   "engine.upscaler.name": "Modèles de qualité d'image",
@@ -1668,5 +1644,28 @@
   "upscale.model_ready": "Prêt",
   "upscale.model_download_size": "Téléchargement de {0} Mo",
   "upscale.downloading_model": "Téléchargement du modèle...",
-  "engines.model.delete_confirm": "Supprimer le modèle {0} ? Vous pouvez le retélécharger à tout moment."
+  "engines.model.delete_confirm": "Supprimer le modèle {0} ? Vous pouvez le retélécharger à tout moment.",
+  "profile.web": "Web pages",
+  "preset.group_web_slice": "Web page slices",
+  "preset.web_2_35_1": "Slice to 2.35:1",
+  "preset.web_2_35_1.short": "2.35:1",
+  "preset.web_16_9": "Slice to 16:9",
+  "preset.web_16_9.short": "16:9",
+  "preset.web_9_16": "Slice to 9:16",
+  "preset.web_9_16.short": "9:16",
+  "preset.web_4_3": "Slice to 4:3",
+  "preset.web_4_3.short": "4:3",
+  "preset.web_3_4": "Slice to 3:4",
+  "preset.web_3_4.short": "3:4",
+  "preset.web_1_1": "Slice to 1:1",
+  "preset.web_1_1.short": "1:1",
+  "engine.browser-html.name": "Chromium",
+  "engine.browser-html.description": "Renders HTML and MHTML pages with a headless Chromium, then cuts the full page into pictures of one aspect ratio.",
+  "engines.package.chromium.name": "Chromium (web page rendering)",
+  "engines.package.chromium.description": "A headless Chromium used by the web page slices presets. It renders the page like a browser, so the output matches what you see. About 200 MB.",
+  "error.web_bad_ratio": "The slice ratio is not valid: {0}",
+  "error.web_too_many_tiles": "The page would make too many pictures ({0}).",
+  "error.web_page_too_large": "The page is too large to render ({0}).",
+  "error.web_load_failed": "The page could not be loaded: {0}",
+  "error.web_render_failed": "The browser could not render the page: {0}"
 }

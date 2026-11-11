@@ -148,6 +148,7 @@ public static class BuiltInData
         new() { Id = "to-txt", Name = "TXT", TargetFormat = "txt" },
         new() { Id = "to-md", Name = "Markdown", TargetFormat = "md" },
         new() { Id = "to-html", Name = "HTML", TargetFormat = "html" },
+        .. WebSlicePresets(),
         .. SpreadsheetPresets(),
         .. CatalogPresets(),
         .. DataPresets(),
@@ -764,6 +765,11 @@ public static class BuiltInData
             };
             (profile.PresetIds, profile.BackPresetIds) = layout;
         }
+        // A donut added after schema 58 goes here, not into ProfilesSchema58(). It must come before "text" so that
+        // ProfileSelector (the first normal profile that has every file's extension) picks it for .html/.htm/... .
+        var web = WebProfile();
+        var textIndex = profiles.FindIndex(p => p.Id == "text");
+        profiles.Insert(textIndex < 0 ? profiles.Count : textIndex, web);
         var folders = new ToolbarProfile
         {
             Id = "folders",
@@ -865,7 +871,10 @@ public static class BuiltInData
     {
         Id = "text",
         NameKey = "profile.text",
-        Extensions = ExtensionsOf(FormatCategory.Text),
+        // The web page donut owns these (WebProfile); leaving them here would make two profiles claim them.
+        Extensions = ExtensionsOf(FormatCategory.Text)
+            .Except(WebExtensions, StringComparer.OrdinalIgnoreCase)
+            .ToList(),
         PresetIds = ["to-pdf", "to-hwpx", "to-hwp", "to-docx", "to-html", "to-txt", "to-epub"],
         BackPresetIds = ["translate", "to-md", "to-odt", "to-rtf", "to-kepub", "merge-pdf", "zip-all"],
     };
@@ -976,6 +985,59 @@ public static class BuiltInData
         PresetIds = ["to-geojson", "to-shp", "to-kml", "to-csv", "to-gpx", "to-kmz"],
         // A shapefile is several files: one ZIP keeps them together.
         BackPresetIds = ["zip-all"],
+    };
+
+    /// <summary>Source extensions of a web page: HTML (and XHTML) and MHTML archives.</summary>
+    public static readonly string[] WebExtensions = ["html", "htm", "xhtml", "mhtml", "mht"];
+
+    /// <summary>
+    /// "Web page slices": a group of six PNG presets that render an HTML/MHTML page with a real browser
+    /// (<see cref="Preset.SlicesWebPage"/>) and cut the full-page picture into tiles of one aspect ratio.
+    /// </summary>
+    public static List<Preset> WebSlicePresets() =>
+    [
+        WebSlicePreset("web-png-2-35-1", "preset.web_2_35_1", "2.35:1", "2.35x1"),
+        WebSlicePreset("web-png-16-9", "preset.web_16_9", "16:9", "16x9"),
+        WebSlicePreset("web-png-9-16", "preset.web_9_16", "9:16", "9x16"),
+        WebSlicePreset("web-png-4-3", "preset.web_4_3", "4:3", "4x3"),
+        WebSlicePreset("web-png-3-4", "preset.web_3_4", "3:4", "3x4"),
+        WebSlicePreset("web-png-1-1", "preset.web_1_1", "1:1", "1x1"),
+        new()
+        {
+            Id = "web-slice",
+            NameKey = "preset.group_web_slice",
+            TargetFormat = Preset.GroupTarget,
+            Kind = PresetKind.Group,
+            SubPresetIds = ["web-png-2-35-1", "web-png-16-9", "web-png-9-16", "web-png-4-3", "web-png-3-4", "web-png-1-1"],
+        },
+    ];
+
+    private static Preset WebSlicePreset(string id, string nameKey, string ratio, string tag) => new()
+    {
+        Id = id,
+        NameKey = nameKey,
+        TargetFormat = "png",
+        Web =
+        {
+            SliceRatio = ratio,
+            ViewportWidth = 1440,
+            DeviceScale = 1,
+            Background = "#FFFFFF",
+            MaxTiles = 40,
+            ScriptWaitMs = 300,
+            FullPage = true,
+        },
+        Output = { FileNamePattern = "{name}_" + tag },
+    };
+
+    /// <summary>The donut of web pages: HTML and MHTML (added in settings schema 79), before "text".</summary>
+    public static ToolbarProfile WebProfile() => new()
+    {
+        Id = "web",
+        NameKey = "profile.web",
+        Extensions = [.. WebExtensions],
+        PresetIds = ["web-slice"],
+        BackPresetIds = ["to-pdf", "to-docx", "to-txt", "to-md", "to-epub", "zip-all"],
     };
 
     /// <summary>Every file extension of the formats in <paramref name="category"/>.</summary>

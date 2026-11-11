@@ -95,7 +95,9 @@ public class BuiltInDataTests
             Assert.InRange(group.SubPresetIds.Count, 1, Preset.MaxSubPresets);
             Assert.All(group.SubPresetIds, id => Assert.False(presets[id].IsGroup, id));
         }
-        Assert.DoesNotContain(BuiltInData.CreateProfiles(), p => p.PresetIds.Any(id => presets[id].IsGroup));
+        // The web page slices donut is the one default donut whose front is a group (of conversions, not edits).
+        Assert.DoesNotContain(BuiltInData.CreateProfiles().Where(p => p.Id != "web"), p => p.PresetIds.Any(id => presets[id].IsGroup));
+        Assert.Equal(["web-slice"], BuiltInData.WebProfile().PresetIds);
     }
 
     [Fact]

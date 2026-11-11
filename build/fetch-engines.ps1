@@ -147,13 +147,29 @@ function Get-Engine([string]$name, [switch]$X64) {
     }
     Write-Host "get  $name  $($info.Url)"
     # GitHub's release downloads answer 504 for minutes at a time, which stopped whole CI runs: try again a few times.
-    Invoke-WebRequest -Uri $info.Url -OutFile $file -UseBasicParsing -UserAgent 'Filee-build' -MaximumRetryCount 5 -RetryIntervalSec 20
-    $hash = (Get-FileHash $file -Algorithm SHA256).Hash
-    if ($hash -ne $info.Sha256) {
-        Remove-Item $file
-        throw "Checksum mismatch for $name. Expected $($info.Sha256), got $hash."
+    # For GitHub URLs, public proxies are tried first (they are much faster here); the SHA-256 still decides.
+    $urls = @()
+    if ($info.Url -match '^https://github\.com/') {
+        $urls += @(
+            'https://gh-proxy.org', 'https://hk.gh-proxy.org', 'https://cdn.gh-proxy.com', 'https://ghfast.top',
+            'https://ghproxy.net', 'https://tvv.tw', 'https://gh.monlor.com', 'https://gh-proxy.com'
+        ) | ForEach-Object { "$_/$($info.Url)" }
     }
-    return $file
+    $urls += $info.Url
+    $last = $null
+    foreach ($url in $urls) {
+        try {
+            Invoke-WebRequest -Uri $url -OutFile $file -UseBasicParsing -UserAgent 'Filee-build' -MaximumRetryCount 2 -RetryIntervalSec 5
+        } catch {
+            $last = $_.Exception.Message
+            continue
+        }
+        $hash = (Get-FileHash $file -Algorithm SHA256).Hash
+        if ($hash -eq $info.Sha256) { return $file }
+        Remove-Item $file -Force -ErrorAction SilentlyContinue
+        $last = "Checksum mismatch for $name. Expected $($info.Sha256), got $hash."
+    }
+    throw $last
 }
 
 function Reset-Folder([string]$path) {
@@ -257,6 +273,20 @@ if ('pandoc' -in $selected) {
     $zip = Get-Engine 'pandoc'
     Expand-Flat $zip (Join-Path $Destination 'pandoc')
     if (-not (Test-Path (Join-Path $Destination 'pandoc\pandoc.exe'))) { throw 'pandoc.exe not found in the archive.' }
+}
+
+if ('chromium' -in $selected) {
+    # Headless Chromium for "web page slices" (BrowserHtmlConverter). The zip holds one folder with chrome.exe.
+    $zip = Get-Engine 'chromium'
+    $target = Join-Path $Destination 'chromium'
+    Expand-Flat $zip $target
+    if (-not (Test-Path (Join-Path $target 'chrome.exe'))) {
+        $exe = Get-ChildItem $target -Recurse -Filter 'chrome.exe' | Select-Object -First 1
+        if (-not $exe) { throw 'chrome.exe not found in the archive.' }
+        if ($exe.DirectoryName -ne $target) {
+            Get-ChildItem $exe.DirectoryName -Force | Move-Item -Destination $target -Force
+        }
+    }
 }
 
 if ('7zip' -in $selected) {

@@ -139,13 +139,15 @@ public partial class BackFaceTests
 
         Assert.True(SettingsMigrations.ApplyToLibrary(29, presets, profiles));
 
-        foreach (var profile in profiles.Where(p => p != mine && p.Id != "folders"))
+        foreach (var profile in profiles.Where(p => p != mine && p.Id is not ("folders" or "web")))
         {
             var expected = Schema58(profile.Id).BackPresetIds!.Where(id => id != "to-gif");
             Assert.Equal(expected, profile.BackPresetIds);
         }
+        // The web donut is added by schema 79, so it has no schema 58 counterpart; it gets its built-in back face.
+        Assert.Equal(BuiltInData.WebProfile().BackPresetIds, profiles.Single(p => p.Id == "web").BackPresetIds);
         Assert.Null(mine.BackPresetIds); // the store gives it an empty one (below)
-        Assert.All(profiles.Where(p => p.Id != "folders"), p => Assert.Equal(fronts[p.Id], p.PresetIds));
+        Assert.All(profiles.Where(p => p.Id != "folders" && fronts.ContainsKey(p.Id)), p => Assert.Equal(fronts[p.Id], p.PresetIds));
         Assert.False(SettingsMigrations.ApplyToLibrary(29, presets, profiles)); // once only
         Assert.False(SettingsMigrations.ApplyToLibrary(AppSettings.CurrentSchemaVersion, presets, profiles));
     }

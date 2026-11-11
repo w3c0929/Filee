@@ -91,6 +91,7 @@ public sealed class EngineEnvironment(string dataDirectory)
         ["whisper"] = [windows ? "whisper-cli.exe" : "whisper-cli"],
         ["exiftool"] = [windows ? "exiftool.exe" : "exiftool"],
         ["upscayl-bin"] = [windows ? "upscayl-bin.exe" : "upscayl-bin"],
+        ["chromium"] = [windows ? "chrome.exe" : "chrome"],
     };
 
     public static string ProgramName(string name) => OperatingSystem.IsWindows() ? name

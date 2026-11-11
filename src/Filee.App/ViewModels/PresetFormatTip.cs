@@ -96,7 +96,8 @@ public sealed partial class PresetFormatTip(
                     Category = group.Key,
                     Formats = group.OrderByDescending(f => DefaultTargets.Contains(f.Id)).ToList(),
                     MinSteps = group.Min(f => preset.IsTool ? 1
-                        : routes.Plan(f.Id, preset.TargetFormat == BuiltInData.SameAsSource ? f.Id : preset.TargetFormat)
+                        : routes.Plan(f.Id, preset.TargetFormat == BuiltInData.SameAsSource ? f.Id : preset.TargetFormat,
+                                webPage: preset.SlicesWebPage)
                             is { Steps.Count: > 0 } route ? route.Steps.Count : 1),
                 })
                 .OrderBy(g => g.MinSteps == 1 ? 0 : 1)

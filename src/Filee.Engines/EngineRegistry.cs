@@ -2,6 +2,7 @@
 
 using Filee.Core.Conversion;
 using Filee.Engines.Archives;
+using Filee.Engines.Browser;
 using Filee.Engines.Cad;
 using Filee.Engines.Data;
 using Filee.Engines.Ebooks;
@@ -81,6 +82,7 @@ public static class EngineRegistry
         new VisionConverter(), // before Tesseract: a Mac's OCR step (Tesseract reads the languages Vision doesn't)
         new TesseractConverter(),
         new CalibreConverter(),
+        new BrowserHtmlConverter(),
         new LibreOfficeConverter(env, loggers?.CreateLogger<LibreOfficeConverter>()),
     ];
 

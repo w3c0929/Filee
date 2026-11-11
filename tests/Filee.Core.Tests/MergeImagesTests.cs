@@ -105,13 +105,13 @@ public class MergeImagesTests
         images.PresetIds = ["merge-images", "to-png"];
         images.BackPresetIds = [.. BackBefore53];
 
-        Assert.False(SettingsMigrations.ApplyToLibrary(50, presets, profiles));
+        SettingsMigrations.ApplyToLibrary(50, presets, profiles); // also adds the web donut (schema 79)
         Assert.Equal(BackBefore53, images.BackPresetIds);
 
         // A full face the user laid out without GIF: nothing of theirs goes.
         images.PresetIds = ["to-png"];
         images.BackPresetIds = [.. BackBefore53.Select(id => id == "to-gif" ? "to-bmp" : id)];
-        Assert.False(SettingsMigrations.ApplyToLibrary(50, presets, profiles));
+        SettingsMigrations.ApplyToLibrary(50, presets, profiles); // also adds the web donut (schema 79)
         Assert.DoesNotContain("merge-images", images.BackPresetIds);
     }
 

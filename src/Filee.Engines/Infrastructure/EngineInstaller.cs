@@ -393,36 +393,45 @@ public sealed class EngineInstaller
     /// </summary>
     private async Task FetchAsync(EngineComponent component, string? localFile, string file, Action<long> reportBytes, CancellationToken cancellationToken)
     {
+        if (localFile is not null)
+        {
+            await using var local = new FileStream(localFile, FileMode.Open, FileAccess.Read, FileShare.Read, 1 << 16, useAsync: true);
+            await CopyAndVerifyAsync(component, local, file, reportBytes, cancellationToken, localFile);
+            return;
+        }
+
+        // GitHub downloads go through public mirrors first (DownloadMirrors), then the original; each attempt is
+        // checked against the pinned SHA-256 before it is kept.
+        Exception? failure = null;
+        foreach (var url in DownloadMirrors.Candidates(new Uri(component.Url)))
+        {
+            try
+            {
+                using var response = await GetFollowingRedirectsAsync(url, cancellationToken);
+                response.EnsureSuccessStatusCode();
+                await using var source = await response.Content.ReadAsStreamAsync(cancellationToken);
+                await CopyAndVerifyAsync(component, source, file, reportBytes, cancellationToken, localFile: null);
+                return;
+            }
+            catch (Exception ex) when (ex is HttpRequestException or IOException or InvalidDataException or TaskCanceledException)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    throw;
+                TryDelete(file + ".part");
+                failure = ex;
+            }
+        }
+        throw failure ?? new InvalidOperationException($"{component.Id}: download failed.");
+    }
+
+    /// <summary>Writes the stream to a .part file, checks it against the pinned SHA-256, then moves it into place.</summary>
+    private async Task CopyAndVerifyAsync(EngineComponent component, Stream source, string file, Action<long> reportBytes,
+        CancellationToken cancellationToken, string? localFile)
+    {
         var partial = file + ".part";
-        using var response = localFile is null ? await GetFollowingRedirectsAsync(new Uri(component.Url), cancellationToken) : null;
-        response?.EnsureSuccessStatusCode();
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         try
         {
-            await CopyAsync();
-        }
-        catch
-        {
-            // Cancelled or cut off: the partial download (up to ~420 MB for LibreOffice) isn't kept (#963).
-            TryDelete(partial);
-            throw;
-        }
-
-        var actual = Convert.ToHexString(hash.GetHashAndReset());
-        if (!string.Equals(actual, component.Sha256, StringComparison.OrdinalIgnoreCase))
-        {
-            TryDelete(partial);
-            if (localFile is not null)
-                throw new ConversionRefusedException("error.engine_file_mismatch", Path.GetFileName(localFile));
-            throw new InvalidDataException($"{component.Id}: checksum mismatch (expected {component.Sha256}, got {actual}). The download was discarded.");
-        }
-        File.Move(partial, file, overwrite: true);
-
-        async Task CopyAsync()
-        {
-            await using var source = response is not null
-                ? await response.Content.ReadAsStreamAsync(cancellationToken)
-                : new FileStream(localFile!, FileMode.Open, FileAccess.Read, FileShare.Read, 1 << 16, useAsync: true);
             await using var target = File.Create(partial);
             var buffer = new byte[1 << 16];
             long received = 0;
@@ -444,6 +453,22 @@ public sealed class EngineInstaller
             }
             reportBytes(received);
         }
+        catch
+        {
+            // Cancelled or cut off: the partial download (up to ~420 MB for LibreOffice) isn't kept (#963).
+            TryDelete(partial);
+            throw;
+        }
+
+        var actual = Convert.ToHexString(hash.GetHashAndReset());
+        if (!string.Equals(actual, component.Sha256, StringComparison.OrdinalIgnoreCase))
+        {
+            TryDelete(partial);
+            if (localFile is not null)
+                throw new ConversionRefusedException("error.engine_file_mismatch", Path.GetFileName(localFile));
+            throw new InvalidDataException($"{component.Id}: checksum mismatch (expected {component.Sha256}, got {actual}). The download was discarded.");
+        }
+        File.Move(partial, file, overwrite: true);
     }
 
     /// <summary>

@@ -77,6 +77,9 @@ public partial class UserDataStoreTests
             "UserWithoutBack" => UserWithoutBackKept(),
             _ => Schema58Library(),
         };
+        // Loading runs the migrations, including schema 79 (the web donut); an import runs none of them.
+        if (!import)
+            expected = WithWeb(expected);
         Assert.Equal(JsonSerializer.Serialize(expected.Profiles, FileeJsonContext.Default.ListToolbarProfile),
             JsonSerializer.Serialize(store.Profiles, FileeJsonContext.Default.ListToolbarProfile));
         Assert.Equal(JsonSerializer.Serialize(expected.Presets, FileeJsonContext.Default.ListPreset),
@@ -158,6 +161,20 @@ public partial class UserDataStoreTests
     {
         var library = Schema58LibraryFor("UserWithoutBack");
         library.Profiles.Single(p => p.Id == "mine").BackPresetIds = [];
+        return library;
+    }
+
+    /// <summary>What schema 79 adds when an older library is loaded: the web donut before text, owning the web extensions.</summary>
+    private static PresetBundle WithWeb(PresetBundle library)
+    {
+        if (library.Profiles.All(p => p.Id != "web"))
+        {
+            var web = BuiltInData.WebProfile();
+            var textAt = library.Profiles.FindIndex(p => p.Id == "text");
+            library.Profiles.Insert(textAt < 0 ? library.Profiles.Count : textAt, web);
+        }
+        if (library.Profiles.FirstOrDefault(p => p.Id == "text") is { } text)
+            text.Extensions.RemoveAll(e => BuiltInData.WebExtensions.Contains(e, StringComparer.OrdinalIgnoreCase));
         return library;
     }
 }

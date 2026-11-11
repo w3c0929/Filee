@@ -298,10 +298,11 @@ public sealed class PresetAvailability
             var live = preset.MakesLivePhotoOf(f.Id);
             var ocr = preset.RecognizesTextOf(f.Id);
             var translate = preset.TranslatesDocument(f.Id);
+            var webPage = preset.SlicesWebPage;
             if (!turns)
-                return planner.CanConvert(f.Id, target, frames, motionPhoto: motion, livePhoto: live, ocr: ocr, translate: translate);
+                return planner.CanConvert(f.Id, target, frames, motionPhoto: motion, livePhoto: live, ocr: ocr, translate: translate, webPage: webPage);
             // Rotate / flip: a route only counts when an engine on it turns images (not a PDF or a video copied).
-            if (planner.Plan(f.Id, target, frames, motionPhoto: motion, livePhoto: live, ocr: ocr, translate: translate) is not { } route)
+            if (planner.Plan(f.Id, target, frames, motionPhoto: motion, livePhoto: live, ocr: ocr, translate: translate, webPage: webPage) is not { } route)
                 return false;
             if (route.FirstTransformStep() >= 0)
                 return true;

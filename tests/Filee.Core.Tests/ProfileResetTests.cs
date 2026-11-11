@@ -32,6 +32,8 @@ public class ProfileResetTests
         var store = NewStore(dir);
         store.Profiles.Clear();
         store.Profiles.AddRange(BuiltInData.ProfilesSchema58());
+        // The web donut was added after schema 58, before text.
+        store.Profiles.Insert(store.Profiles.FindIndex(p => p.Id == "text"), BuiltIn("web"));
         store.Profiles.Insert(store.Profiles.FindIndex(p => p.Id == "archives") + 1, BuiltIn("folders"));
         store.SaveLibrary();
 

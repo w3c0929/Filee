@@ -818,15 +818,17 @@ public sealed partial class JobQueue : IAsyncDisposable
         // "Metadata": only an engine that writes the metadata and nothing else, never a route that re-encodes the file.
         // An envelope has no such edge: opening it for the file inside would drop the changes without a word.
         var metadata = finalOutput && runWith.EditsMetadata;
+        // A web page slice is rendered by a real browser and cut up: only such a job may take a WebPage edge.
+        var webPage = finalOutput && runWith.SlicesWebPage;
         var route = opener is null || metadata
             ? planner.Plan(source.Id, target, frames, motionPhoto: motionPhoto, livePhoto: livePhoto, ocr: ocr, caption: caption, translate: translate,
-                metadata: metadata, upscale: upscale)
+                metadata: metadata, upscale: upscale, webPage: webPage)
             : planner.PlanThrough(source.Id, from.Id, target, frames, motionPhoto: motionPhoto, livePhoto: livePhoto, ocr: ocr, caption: caption, translate: translate,
-                upscale: upscale);
+                upscale: upscale, webPage: webPage);
         if (route is null)
             return Fail(file, "error.no_route", $"{from.Id} → {target}",
                 new RouteRequest(from.Id, target, Frames: frames, MotionPhoto: motionPhoto, LivePhoto: livePhoto, Ocr: ocr, Translate: translate, Metadata: metadata,
-                    Upscale: upscale));
+                    Upscale: upscale, WebPage: webPage));
 
         // A step that draws text without shaping (rhwp) would break Arabic, Hebrew, Indic or Thai text: such a file
         // takes a route without it (LibreOffice), or is refused with the reason rather than written broken. One
@@ -839,7 +841,7 @@ public sealed partial class JobQueue : IAsyncDisposable
         {
             _log.LogInformation("{File} has {Script} text, which {Engine} can't draw: planning a route without it",
                 file.SourcePath, script, route.Steps.First(s => s.Unshaped).Converter.DisplayName);
-            route = planner.Plan(source.Id, target, frames, shaping: true, ocr: ocr);
+            route = planner.Plan(source.Id, target, frames, shaping: true, ocr: ocr, webPage: webPage);
             if (route is null)
                 return Fail(file, "error.needs_shaping", script);
         }
@@ -851,7 +853,7 @@ public sealed partial class JobQueue : IAsyncDisposable
         {
             _log.LogInformation("{File} has {Script} text, which {Engine} can't measure: planning a route without it",
                 file.SourcePath, unmeasured, route.Steps.First(s => s.Unshaped).Converter.DisplayName);
-            route = planner.Plan(source.Id, target, frames, shaping: true) ?? route;
+            route = planner.Plan(source.Id, target, frames, shaping: true, webPage: webPage) ?? route;
         }
 
         // Rotate / flip: only an engine that turns images does it. Without one the file would come out unturned
@@ -922,7 +924,7 @@ public sealed partial class JobQueue : IAsyncDisposable
                                 file.MissingFonts = file.MissingFonts.Concat(fonts)
                                     .Distinct(StringComparer.OrdinalIgnoreCase).ToList();
                                 Notify(job);
-                            }, file.SourcePath, Caption: step.Caption, Translate: step.Translate);
+                            }, file.SourcePath, Caption: step.Caption, Translate: step.Translate, WebPage: step.WebPage);
                         outputs.AddRange(await step.Converter.ConvertAsync(stepInfo, progress, ct));
                     }
                     finally

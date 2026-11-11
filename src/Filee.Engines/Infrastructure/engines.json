@@ -1,6 +1,13 @@
 {
   "_comment": "Downloadable conversion engines: pinned URL + SHA-256. Used by the app (Settings > Engines, first-run setup) and by build/fetch-engines.ps1. Bumping a version = change url, sha256 and size together. minimumMacOS: the oldest macOS a macOS download runs on; older Macs are not offered it.",
   "components": {
+    "chromium": {
+      "version": "157.0.8103.38-1.1",
+      "url": "https://github.com/ungoogled-software/ungoogled-chromium-windows/releases/download/157.0.8103.38-1.1/ungoogled-chromium_157.0.8103.38-1.1_windows_x64.zip",
+      "sha256": "7AAE503C42974753DE7E2FA3910106B8594B027E7E567BAF7E69016B2A4E6C74",
+      "size": 203547113,
+      "kind": "zip"
+    },
     "rhwp": {
       "version": "0.8.7",
       "url": "https://github.com/edwardkim/rhwp/releases/download/v0.8.7/rhwp-v0.8.7-windows-x86_64.zip",

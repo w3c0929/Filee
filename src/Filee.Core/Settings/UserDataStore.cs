@@ -292,6 +292,11 @@ public sealed class UserDataStore
     /// <summary>Removes dangling preset references and guarantees at least one mixed-selection profile.</summary>
     private void EnsureConsistency()
     {
+        // A library saved by a Filee that dropped back faces gets the web donut's built-in one back (it isn't in the
+        // frozen schema 58 table AddBackFaces knows). A back emptied by the user ([]) stays empty.
+        if (Profiles.FirstOrDefault(p => p.Id == "web") is { BackPresetIds: null } web)
+            web.BackPresetIds = [.. BuiltInData.WebProfile().BackPresetIds!];
+
         var ids = Presets.Select(p => p.Id).ToHashSet();
         foreach (var profile in Profiles)
         {
@@ -455,7 +460,6 @@ internal static class SettingsMigrations
         //      ties. (Schema 21 may be renumbered if another change takes it first.)
         if (settings.SchemaVersion < 21)
             InsertBefore(settings.EnginePriority, "wic", settings.EnginePriority.Contains("ffmpeg") ? "ffmpeg" : "pandoc");
-
 
         if (settings.Triggers.Count == 0)
             settings.Triggers = TriggerGesture.Defaults();
@@ -1089,6 +1093,76 @@ internal static class SettingsMigrations
         //      claims stay put. (Schema 78 may be renumbered if another change takes it first.)
         if (from < 78)
             changed |= LearnExtensions(profiles, out _, ["exe", "dll"]);
+        // v79: the web page donut (HTML / MHTML) with six "slice to a ratio" presets, before "text".
+        if (from < 79)
+            changed |= AddWeb(presets, profiles);
+        return changed;
+    }
+
+    /// <summary>
+    /// v79: adds the web page donut and its six slice presets, and moves html/htm/xhtml/mhtml/mht off the built-in text
+    /// donut. A user's own donut that already takes one of those extensions keeps it; edits to the presets are kept.
+    /// </summary>
+    private static bool AddWeb(List<Preset> presets, List<ToolbarProfile> profiles)
+    {
+        var changed = false;
+        var defaults = BuiltInData.WebSlicePresets();
+
+        // In a new library they follow "to-html"; keep existing ones where they are.
+        var at = presets.FindIndex(p => p.Id == "to-html");
+        at = at < 0 ? presets.Count : at + 1;
+        foreach (var preset in defaults)
+        {
+            if (presets.FirstOrDefault(p => p.Id == preset.Id) is { } existing)
+            {
+                // Saved since by an older Filee, which dropped the Web options and left a plain PNG preset.
+                if (existing.Web.SliceRatio.Length == 0 && preset.Web.SliceRatio.Length > 0
+                    && existing.TargetFormat == preset.TargetFormat)
+                {
+                    existing.Web = preset.Web.Clone();
+                    changed = true;
+                }
+                if (preset.IsGroup && !existing.IsGroup)
+                {
+                    existing.Kind = PresetKind.Group;
+                    existing.TargetFormat = Preset.GroupTarget;
+                    existing.SubPresetIds = [.. preset.SubPresetIds];
+                    changed = true;
+                }
+                at = presets.IndexOf(existing) + 1;
+                continue;
+            }
+            presets.Insert(Math.Min(at++, presets.Count), preset);
+            changed = true;
+        }
+
+        // The built-in text donut gives up the web page extensions; one the user added keeps whatever it claims.
+        if (profiles.FirstOrDefault(p => p.Id == "text") is { } text)
+            changed |= text.Extensions.RemoveAll(e => BuiltInData.WebExtensions.Contains(e, StringComparer.OrdinalIgnoreCase)) > 0;
+
+        if (profiles.All(p => p.Id != "web"))
+        {
+            var claimed = profiles.Where(p => !p.IsFallback)
+                .SelectMany(p => p.Extensions)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var web = BuiltInData.WebProfile();
+            web.Extensions = web.Extensions.Where(claimed.Add).ToList();
+            var ids = presets.Select(p => p.Id).ToHashSet();
+            web.PresetIds = web.PresetIds.Where(ids.Contains).ToList();
+            if (web.Extensions.Count > 0)
+            {
+                var textAt = profiles.FindIndex(p => p.Id == "text");
+                profiles.Insert(textAt < 0 ? profiles.Count : textAt, web);
+                changed = true;
+            }
+        }
+        else if (profiles.FirstOrDefault(p => p.Id == "web") is { BackPresetIds: null } existing)
+        {
+            // Saved by a Filee from before back faces (or one that dropped them): give it the built-in back again.
+            existing.BackPresetIds = [.. BuiltInData.WebProfile().BackPresetIds!];
+            changed = true;
+        }
+
         return changed;
     }
 

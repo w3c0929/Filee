@@ -1,7 +1,6 @@
 {
   "app.name": "Filee",
   "app.tagline": "拖一拖，放一放，轉換完成。",
-
   "fields.title": "領域",
   "fields.description": "關閉您不使用的領域。僅屬於已關閉領域的格式不會出現在圓環的扇形、「設定 → 環形工具列」中的「可用預設」、「設定 → 預設」中的清單以及預設的「轉換為」清單中。Filee 仍會辨識這些格式的檔案，命令列仍可轉換為這些格式；拖入的檔案也仍會提供其所屬領域的格式。",
   "fields.formats": "格式：{0}",
@@ -18,7 +17,6 @@
   "fields.name.video-pro": "影片製作與廣播",
   "fields.name.audio-pro": "專業音訊",
   "fields.name.legacy": "舊格式",
-
   "nav.home": "首頁",
   "nav.general": "一般",
   "nav.triggers": "觸發方式",
@@ -32,7 +30,6 @@
   "nav.collapse": "收合側邊欄",
   "nav.expand": "展開側邊欄",
   "nav.page_error": "無法開啟此頁面。詳細資訊見記錄檔。",
-
   "tray.open": "開啟 Filee",
   "tray.pause": "暫停快捷操作",
   "tray.resume": "恢復快捷操作",
@@ -44,7 +41,6 @@
   "close.tray": "保留在系統匣",
   "close.quit": "結束",
   "close.dont_ask": "不再詢問",
-
   "home.title": "首頁",
   "home.drop_title": "將檔案拖放到這裡",
   "home.drop_select": "按兩下選取檔案",
@@ -73,7 +69,6 @@
   "home.undone": "已復原：結果已在資源回收筒/垃圾桶中",
   "home.undone_original": "已復原：結果已在資源回收筒/垃圾桶中，被取代的原始檔也在那裡",
   "home.undo_failed": "無法將 {0} 移到資源回收筒/垃圾桶：{1}",
-
   "donut.center_drag": "把檔案拖到這裡",
   "donut.files_same": "{0} 個 {1}",
   "donut.files_mixed": "{0} 個檔案",
@@ -89,7 +84,6 @@
   "donut.group_caption": "群組 · {0} 個項目",
   "donut.flip_to_back": "{0} 背面",
   "donut.flip_to_front": "{0} 正面",
-
   "toast.converting": "{0} → {1}",
   "toast.done": "完成",
   "toast.done_errors": "{1} 個中有 {0} 個失敗",
@@ -102,7 +96,6 @@
   "toast.get_fonts": "取得字型",
   "download.badge": "{0}/s · {1}",
   "download.badge_files": "{0} · 第 {1}/{2} 個檔案",
-
   "error.unsupported_source": "不支援此檔案類型",
   "error.empty_file": "檔案是空的（0 位元組）。用右鍵選單「新增」建立的檔案，要在對應的應用程式中開啟並儲存後才有內容",
   "error.p7m_unreadable": "這不是 Filee 能開啟的已簽署 .p7m 檔案，或檔案已損壞",
@@ -207,7 +200,6 @@
   "notice.geo_shapefile_split": "Shapefile 只能儲存一種形狀，因此點、線、面被分別存成了多個檔案",
   "notice.geo_heights_dropped": "部分點沒有高度，而 Shapefile 無法只省略其中一個點的高度，因此已省略所有高度",
   "notice.osm_incomplete": "部分線和區域用到了檔案中沒有的點（擷取的局部資料），因此已省略",
-
   "engine.reason.not_installed": "未安裝",
   "engine.reason.error": "檢查時出錯",
   "engine.reason.unsupported_platform": "此平台不可用",
@@ -274,7 +266,6 @@
   "engine.libreoffice.description": "讀取較舊或少見的格式，如 DOC、PPT、Pages、Keynote、Numbers、WordPerfect、ClarisWorks、Publisher、Visio。\n也能儲存為 DOC、XLS、PPT、ODT、ODP、OpenDocument 範本或 EMF。",
   "engine.translator.description": "使用離線 Ollama 模型在本地翻譯文件與電子書。\n也能翻譯 SRT 和 WebVTT 字幕：只將字幕文字傳送給模型，字幕序號和時間軸保持不變。",
   "engine.exiftool.description": "讀取圖片、PDF、影片和音訊的所有中繼資料欄位，並在大多數類型的檔案中編輯它們，不更動檔案內容。\n供「中繼資料」工具使用；沒有它時，欄位只能檢視。",
-
   "profile.images": "圖片",
   "profile.pdf": "PDF",
   "profile.office": "文件",
@@ -294,7 +285,6 @@
   "profile.models": "3D 模型",
   "profile.geo": "地理資訊 (GIS)",
   "profile.mixed": "混合檔案",
-
   "preset.crop": "裁剪",
   "crop.save": "裁剪並儲存",
   "crop.reset": "重設",
@@ -422,7 +412,6 @@
   "clip.silence_removed": "已去除靜音：{0} 處",
   "clip.no_silence": "沒有找到靜音",
   "clip.cannot_play": "無法播放片段",
-
   "preset.half_size": "縮小 50%",
   "preset.half_size.donut": "縮小 50%",
   "preset.image_edit": "編輯圖片",
@@ -542,7 +531,6 @@
   "preset.merge_audio": "合併音訊",
   "preset.merge_images": "合併圖片",
   "preset.remove_metadata": "移除中繼資料",
-
   "format.folder": "資料夾",
   "format.category.Image": "圖片",
   "format.category.Pdf": "PDF",
@@ -562,7 +550,6 @@
   "format.category.Data": "資料",
   "format.category.Model3D": "3D 模型",
   "format.category.Geo": "地理資訊",
-
   "general.title": "一般",
   "general.language": "語言",
   "general.language_auto": "跟隨系統",
@@ -653,7 +640,6 @@
   "general.library_note": "你的其他設定不會變更。",
   "general.reset_confirm": "要將所有預設和工具列設定檔還原為初始設定嗎？",
   "general.imported": "已匯入 {0} 項",
-
   "triggers.title": "觸發方式",
   "triggers.description": "選擇開啟環形工具列的方式。可以新增任意多個手勢。",
   "triggers.macos_permissions": "請在「系統設定 > 隱私權與安全性 > 輔助使用」中允許 Filee。\n如果 Filee 已開啟但手勢仍未啟動，請用 − 將其移除，再用 + 重新加入。\n首次使用「選取檔案」的快速鍵時，Finder 還會要求自動化權限。",
@@ -715,7 +701,6 @@
   "triggers.excluded_none_running": "沒有其他開啟視窗的應用程式。",
   "triggers.excluded_note": "指標位於這些應用程式上時，手勢和快速鍵不起作用。",
   "triggers.paused": "快捷操作已暫停",
-
   "toolbar.title": "環形工具列",
   "toolbar.step_profile": "1. 選擇設定檔",
   "toolbar.step_arrange": "2. 排列預設",
@@ -784,18 +769,17 @@
   "toolbar.mixed_covered": "排在前面的「{0}」允許此處勾選的所有副檔名，因此不會使用此設定檔。",
   "toolbar.mixed_others": "其他混合選取會開啟「{0}」。",
   "toolbar.mixed_others_self": "沒有未勾選任何項目的混合設定檔，因此其他混合選取也會使用此設定檔。",
-   "toolbar.chip_tip.makes": "→ {0} · {1}",
-   "toolbar.chip_tip.makes_same": "→ 相同格式",
-   "toolbar.chip_tip.makes_name": "→ {0}",
-   "toolbar.chip_tip.works_with": "支援的格式：{0}",
-   "toolbar.chip_tip.kind": "{0}（{1}）",
-   "toolbar.chip_tip.name_separator": "、",
-   "toolbar.chip_tip.names_more": "{0} +{1}",
-   "toolbar.chip_tip.more_shift": "+{0} 項 · 按 Shift 顯示全部",
-   "toolbar.chip_tip.shift_all": "按 Shift 顯示全部",
-   "toolbar.chip_tip.any_file": "任何檔案",
-   "tags.remove": "移除",
-
+  "toolbar.chip_tip.makes": "→ {0} · {1}",
+  "toolbar.chip_tip.makes_same": "→ 相同格式",
+  "toolbar.chip_tip.makes_name": "→ {0}",
+  "toolbar.chip_tip.works_with": "支援的格式：{0}",
+  "toolbar.chip_tip.kind": "{0}（{1}）",
+  "toolbar.chip_tip.name_separator": "、",
+  "toolbar.chip_tip.names_more": "{0} +{1}",
+  "toolbar.chip_tip.more_shift": "+{0} 項 · 按 Shift 顯示全部",
+  "toolbar.chip_tip.shift_all": "按 Shift 顯示全部",
+  "toolbar.chip_tip.any_file": "任何檔案",
+  "tags.remove": "移除",
   "presets.title": "預設",
   "presets.add": "新增",
   "presets.add_empty": "空白預設",
@@ -1177,7 +1161,6 @@
   "presets.delete_confirm": "刪除「{0}」？它也會從所有工具列和群組中移除。",
   "presets.name_required": "請輸入名稱",
   "presets.select": "選擇要編輯的預設",
-
   "theme.title": "主題",
   "theme.style": "主題樣式",
   "theme.style.Soft": "Filee Soft",
@@ -1216,7 +1199,6 @@
   "theme.preview": "預覽",
   "theme.preview_toggle": "範例開關（僅供預覽，不是設定）",
   "theme.preview_toggle_hint": "顯示此主題中開關的外觀，不會變更任何設定。",
-
   "engines.title": "轉換引擎",
   "engines.description": "Filee 會為每次轉換選擇最合適的可用引擎。\n多個引擎能完成同一轉換時，清單中排在前面的優先。",
   "engines.available": "可用",
@@ -1308,7 +1290,6 @@
   "engines.copy_links": "複製下載連結",
   "engines.links_copied": "下載連結已複製到剪貼簿。請在能連網的電腦上下載這些檔案，然後在這裡選擇 離線 → 從已下載的檔案安裝。",
   "engines.state.copying": "複製中 {0}%",
-
   "about.title": "關於",
   "about.updates": "更新",
   "common.search": "搜尋",
@@ -1333,7 +1314,6 @@
   "feedback.notice_text": "在 GitHub 上加個星號（⭐）能幫助更多人發現 Filee。\n也歡迎回報問題或提出想法。",
   "feedback.star": "在 GitHub 上加星號",
   "feedback.issue": "回報問題 · 提出建議",
-
   "common.ok": "確定",
   "common.cancel": "取消",
   "common.save": "儲存",
@@ -1343,7 +1323,6 @@
   "common.no": "否",
   "common.on": "開",
   "common.off": "關",
-
   "setup.title": "選擇轉換引擎",
   "setup.description": "圖片、PDF、Office 文件、HWP、電子書、壓縮檔、字型、CAD 和 3D 模型現在就能轉換。\n只有影片、音訊或少見格式才需要下載引擎。",
   "setup.note": "可隨時在「設定 → 轉換引擎」中安裝或刪除引擎。",
@@ -1510,7 +1489,6 @@
   "watch.status_starting": "正在啟動…",
   "watch.status_error": "無法監視此資料夾：{0}",
   "watch.cli_hint": "也可以在命令列中使用：filee watch <資料夾> --to <格式>",
-
   "preset.sheet_studio": "PDF + 編輯",
   "sheet_studio.title": "試算表列印工作室",
   "sheet_studio.sheets": "工作表與輸出順序",
@@ -1550,7 +1528,6 @@
   "sheet_studio.apply_fix": "套用建議版面配置",
   "sheet_studio.add_region": "+ 新增另一個範圍",
   "sheet_studio.region_name": "{0} · 範圍 {1}",
-
   "whats_new.title": "Filee {0} 新功能",
   "whats_new.previous": "上一頁",
   "whats_new.next": "下一頁",
@@ -1646,7 +1623,6 @@
   "engine.iso.description": "從資料夾或壓縮檔內容建立 ISO 映像，保留 Unicode 名稱和空資料夾。",
   "preset.iso_image": "ISO 映像",
   "profile.folders": "資料夾",
-
   "preset.upscale": "放大圖像畫質",
   "preset.upscale.donut": "超解析度放大",
   "engine.upscaler.name": "畫質提升模型",
@@ -1668,5 +1644,28 @@
   "upscale.model_ready": "就緒",
   "upscale.model_download_size": "{0} MB 下載",
   "upscale.downloading_model": "正在下載模型...",
-  "engines.model.delete_confirm": "確定要刪除模型 {0} 嗎？您可以隨時重新下載。"
+  "engines.model.delete_confirm": "確定要刪除模型 {0} 嗎？您可以隨時重新下載。",
+  "profile.web": "網頁",
+  "preset.group_web_slice": "網頁切片",
+  "preset.web_2_35_1": "切成 2.35:1",
+  "preset.web_2_35_1.short": "2.35:1",
+  "preset.web_16_9": "切成 16:9",
+  "preset.web_16_9.short": "16:9",
+  "preset.web_9_16": "切成 9:16",
+  "preset.web_9_16.short": "9:16",
+  "preset.web_4_3": "切成 4:3",
+  "preset.web_4_3.short": "4:3",
+  "preset.web_3_4": "切成 3:4",
+  "preset.web_3_4.short": "3:4",
+  "preset.web_1_1": "切成 1:1",
+  "preset.web_1_1.short": "1:1",
+  "engine.browser-html.name": "Chromium",
+  "engine.browser-html.description": "用無頭 Chromium 渲染 HTML/MHTML 網頁，再把整頁切成指定比例的圖片。",
+  "engines.package.chromium.name": "Chromium（網頁渲染）",
+  "engines.package.chromium.description": "網頁切片預設使用的無頭 Chromium，依瀏覽器效果渲染頁面，約 200 MB。",
+  "error.web_bad_ratio": "切片比例無效：{0}",
+  "error.web_too_many_tiles": "該頁面會切成過多圖片（{0}）。",
+  "error.web_page_too_large": "頁面過大，無法渲染（{0}）。",
+  "error.web_load_failed": "網頁載入失敗：{0}",
+  "error.web_render_failed": "瀏覽器渲染失敗：{0}"
 }

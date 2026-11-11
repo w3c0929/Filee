@@ -1095,12 +1095,12 @@ public partial class UserDataStoreTests
         profiles = BuiltInData.ProfilesSchema58();
         profiles.Single(p => p.Id == "models").Extensions.Remove("fbx");
         profiles.Insert(0, new ToolbarProfile { Id = "games", Name = "Games", Extensions = ["fbx"] });
-        Assert.False(SettingsMigrations.ApplyToLibrary(21, presets, profiles));
+        SettingsMigrations.ApplyToLibrary(21, presets, profiles); // also adds the web donut (schema 79)
         Assert.DoesNotContain("fbx", profiles.Single(p => p.Id == "models").Extensions);
     }
 
     [Fact]
-    public void Version_22_libraries_learn_mhtml_on_the_text_donut_and_nothing_else()
+    public void Version_22_libraries_learn_mhtml_on_the_web_donut_and_nothing_else()
     {
         // As written with schema 22: no MHTML, and the user took Markdown off the text donut.
         var presets = BuiltInData.CreatePresets();
@@ -1110,17 +1110,21 @@ public partial class UserDataStoreTests
 
         Assert.True(SettingsMigrations.ApplyToLibrary(22, presets, profiles));
 
-        Assert.Contains("mhtml", text.Extensions);
-        Assert.Contains("mht", text.Extensions);
+        // Schema 79 moved MHTML to the web donut (and text gave it up).
+        var web = profiles.Single(p => p.Id == "web");
+        Assert.Contains("mhtml", web.Extensions);
+        Assert.Contains("mht", web.Extensions);
+        Assert.DoesNotContain("mhtml", text.Extensions);
         Assert.DoesNotContain("md", text.Extensions);
         Assert.False(SettingsMigrations.ApplyToLibrary(22, presets, profiles)); // once only
 
-        // A donut of the user that already opens .mht files keeps them; .mhtml still goes to the text donut.
+        // A donut of the user that already opens .mht files keeps them; .mhtml still goes to the web donut.
         profiles = BuiltInData.ProfilesSchema58();
         profiles.Single(p => p.Id == "text").Extensions.RemoveAll(e => e is "mhtml" or "mht");
-        profiles.Insert(0, new ToolbarProfile { Id = "web", Name = "Web", Extensions = ["mht"] });
+        profiles.Insert(0, new ToolbarProfile { Id = "myweb", Name = "Web", Extensions = ["mht"] });
         Assert.True(SettingsMigrations.ApplyToLibrary(22, presets, profiles));
-        Assert.Equal(["mhtml"], profiles.Single(p => p.Id == "text").Extensions.Where(e => e.StartsWith("mht", StringComparison.Ordinal)));
+        Assert.Contains("mhtml", profiles.Single(p => p.Id == "web").Extensions);
+        Assert.DoesNotContain("mhtml", profiles.Single(p => p.Id == "myweb").Extensions);
     }
 
     [Fact]
@@ -1142,7 +1146,7 @@ public partial class UserDataStoreTests
         profiles = BuiltInData.ProfilesSchema58();
         profiles.Single(p => p.Id == "presentations").Extensions.Remove("potm");
         profiles.Insert(0, new ToolbarProfile { Id = "templates", Name = "Templates", Extensions = ["potm"] });
-        Assert.False(SettingsMigrations.ApplyToLibrary(23, presets, profiles));
+        SettingsMigrations.ApplyToLibrary(23, presets, profiles); // also adds the web donut (schema 79)
         Assert.DoesNotContain("potm", profiles.Single(p => p.Id == "presentations").Extensions);
     }
 
@@ -1165,7 +1169,7 @@ public partial class UserDataStoreTests
         profiles = BuiltInData.ProfilesSchema58();
         profiles.Single(p => p.Id == "office").Extensions.Remove("ofd");
         profiles.Insert(0, new ToolbarProfile { Id = "invoices", Name = "Invoices", Extensions = ["ofd"] });
-        Assert.False(SettingsMigrations.ApplyToLibrary(26, presets, profiles));
+        SettingsMigrations.ApplyToLibrary(26, presets, profiles); // also adds the web donut (schema 79)
         Assert.DoesNotContain("ofd", profiles.Single(p => p.Id == "office").Extensions);
     }
 

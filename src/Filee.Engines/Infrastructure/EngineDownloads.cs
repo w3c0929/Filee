@@ -58,6 +58,8 @@ public static class EngineDownloads
         .. (OperatingSystem.IsWindows() ? [new EnginePackage("whisper", ["whisper", "whisper-model"], 156_880_105, ["whisper"])] : Array.Empty<EnginePackage>()),
         // The Metadata tool reads with it and its conversions write with it (Filee.Engines.Metadata).
         new("exiftool", ["exiftool"], 30_000_000, ["exiftool"]),
+        // Renders web pages for the "web page slices" presets (BrowserHtmlConverter). No system browser is used.
+        new("chromium", ["chromium"], 520_000_000, ["browser-html"]),
     ];
 
     /// <summary>Total download size of a package in bytes.</summary>

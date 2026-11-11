@@ -49,6 +49,10 @@ public class PresetEditorTargetTests
         TestServices.EnsureInitialized("en");
         var store = AppHost.Get<UserDataStore>();
         var preset = store.FindPreset("web-png-16-9")!.Clone();
+        // Fixed values, independent of the built-in defaults.
+        preset.Web.ViewportWidth = 1440;
+        preset.Web.DeviceScale = 1;
+        preset.Web.PageZoom = 1;
         var editor = new PresetEditorViewModel(preset, AppHost.Get<ILocalizer>());
 
         Assert.True(editor.ShowWeb);

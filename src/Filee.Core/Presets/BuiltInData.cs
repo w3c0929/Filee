@@ -1020,8 +1020,10 @@ public static class BuiltInData
         Web =
         {
             SliceRatio = ratio,
-            ViewportWidth = 1440,
-            DeviceScale = 1,
+            // Full-screen browser at 150% on a 2560x1440 screen with 150% display scaling: 1138 CSS x 1.5.
+            ViewportWidth = 1138,
+            DeviceScale = 1.5,
+            PageZoom = 1.5,
             Background = "#FFFFFF",
             MaxTiles = 40,
             ScriptWaitMs = 300,

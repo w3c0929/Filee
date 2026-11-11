@@ -624,7 +624,8 @@ public class ToolbarPaletteViewTests
     private static View TallView(ToolbarPageViewModel vm)
     {
         var view = new View(vm);
-        view.Window.Height = 1600;
+        // Tall enough that the whole page fits (no touch scroll) after the web donut joined the profile list.
+        view.Window.Height = 2000;
         RenderTests.Pump();
         return view;
     }
@@ -1375,7 +1376,7 @@ public class ToolbarPaletteViewTests
         using var vm = page;
         Dispatcher.UIThread.RunJobs();
         using var view = new View(vm);
-        view.Window.Height = 1600;
+        view.Window.Height = 2000;
         RenderTests.Pump();
         var (shownBefore, otherBefore) = (shown.PresetIds.ToList(), other.PresetIds.ToList());
         var palette = view.Center(view.Box);

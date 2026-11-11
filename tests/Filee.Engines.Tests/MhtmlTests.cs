@@ -149,9 +149,13 @@ public class MhtmlTests(EngineFixture fx) : IClassFixture<EngineFixture>
         Assert.Equal("mhtml", FormatRegistry.Detect("page.MHTML")!.Id);
         Assert.False(FormatRegistry.Get("mhtml").Writable);
         Assert.Equal(FormatCategory.Text, FormatRegistry.Get("mhtml").Category);
+        // Schema 79 moved MHTML to the web page donut; text gave it up.
+        var web = BuiltInData.CreateProfiles().Single(p => p.Id == "web");
+        Assert.Contains("mhtml", web.Extensions);
+        Assert.Contains("mht", web.Extensions);
         var text = BuiltInData.CreateProfiles().Single(p => p.Id == "text");
-        Assert.Contains("mhtml", text.Extensions);
-        Assert.Contains("mht", text.Extensions);
+        Assert.DoesNotContain("mhtml", text.Extensions);
+        Assert.DoesNotContain("mht", text.Extensions);
     }
 
     [Fact]

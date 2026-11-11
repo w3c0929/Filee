@@ -241,7 +241,7 @@ public class ToolbarPaletteViewTests
         Dispatcher.UIThread.RunJobs();
         using var view = new View(vm);
         Assert.False(view.Tabs.IsVisible);
-        Assert.Equal(["pdf-edit", "pdf-nup", "rotate", "flip", "crop-video", "test-group"], view.Chips);
+        Assert.Equal(["pdf-edit", "pdf-nup", "rotate", "flip", "crop-video", "web-slice", "test-group"], view.Chips);
 
         // PDF: one kind (Documents) that would only repeat All. Two tabs, but the row stays hidden.
         // (Without the PDF page tools, which would add the Edit kind.)
@@ -254,7 +254,7 @@ public class ToolbarPaletteViewTests
         Assert.Equal([PaletteTab.All, PaletteTab.Document], view.TabIds);
         Assert.False(view.Tabs.IsVisible);
         Assert.Equal(PaletteTab.All, view.Selected);
-        Assert.Equal(["pdf-edit", "pdf-nup", "rotate", "flip", "crop-video", "test-group", "merge-pdf", "test-merge"], view.Chips);
+        Assert.Equal(["pdf-edit", "pdf-nup", "rotate", "flip", "crop-video", "web-slice", "test-group", "merge-pdf", "test-merge"], view.Chips);
 
         // PNG: several kinds, so the row shows.
         f.Store.Profiles.Add(Profile("tabs-png", "png"));
@@ -522,10 +522,12 @@ public class ToolbarPaletteViewTests
         Assert.Equal([PaletteTab.All, PaletteTab.Media, PaletteTab.Edit], view.TabIds);
 
         view.ClickTab(PaletteTab.Media);
+        faces[1].BringIntoView();
+        RenderTests.Pump();
         view.Click(faces[1]);
-        Assert.True(vm.EditingBack);
+        Assert.True(vm.EditingBack, $"back radio at {faces[1].Bounds}, visible {faces[1].IsEffectivelyVisible}");
         Assert.Equal(PaletteTab.Media, view.Selected);
-        Assert.Equal(["pdf-edit", "pdf-nup", "rotate", "flip", "crop-video", "test-group", "extract-motion", "test-motion"], view.Chips);
+        Assert.Equal(["pdf-edit", "pdf-nup", "rotate", "flip", "crop-video", "web-slice", "test-group", "extract-motion", "test-motion"], view.Chips);
         view.Click(faces[0]);
         Assert.False(vm.EditingBack);
         Assert.Equal(PaletteTab.Media, view.Selected);
@@ -542,7 +544,7 @@ public class ToolbarPaletteViewTests
         RenderTests.Pump();
         Assert.Equal(PaletteTab.All, view.Selected);
         view.ClickTab(PaletteTab.Edit);
-        Assert.Equal(["pdf-edit", "pdf-nup", "rotate", "flip", "crop-video", "test-group", "tool-crop", "tool-image-edit", "tool-hide"], view.Chips);
+        Assert.Equal(["pdf-edit", "pdf-nup", "rotate", "flip", "crop-video", "web-slice", "test-group", "tool-crop", "tool-image-edit", "tool-hide"], view.Chips);
         DoubleTap(view.Chip("tool-crop"));
         RenderTests.Pump();
         Assert.Equal(["tool-crop"], jpg.PresetIds);
@@ -554,7 +556,7 @@ public class ToolbarPaletteViewTests
         Assert.Equal(["tool-crop", "tool-image-edit", "tool-hide"], jpg.PresetIds);
         Assert.DoesNotContain(PaletteTab.Edit, view.TabIds);
         Assert.Equal(PaletteTab.All, view.Selected);
-        Assert.Equal(["pdf-edit", "pdf-nup", "rotate", "flip", "crop-video", "test-group", "extract-motion", "test-motion"], view.Chips);
+        Assert.Equal(["pdf-edit", "pdf-nup", "rotate", "flip", "crop-video", "web-slice", "test-group", "extract-motion", "test-motion"], view.Chips);
     }
 
     [AvaloniaFact]

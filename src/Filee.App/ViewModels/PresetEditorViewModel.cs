@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using Filee.App.Services;
 using Filee.Core.Formats;
 using Filee.Core.Localization;
+using Filee.Core.Platform;
 using Filee.Core.Presets;
 using Filee.Core.Settings;
 using Filee.Engines.Ocr;
@@ -101,19 +102,22 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     private readonly Preset _original;
     private readonly Preset _edit;
     private readonly ILocalizer _loc;
+    private readonly (int Width, double Scale)? _screen;
 
-    public PresetEditorViewModel(Preset preset, ILocalizer loc, IReadOnlySet<string>? turnedOff = null, bool folderInput = false)
-        : this(preset, loc, turnedOff, null, folderInput)
+    public PresetEditorViewModel(Preset preset, ILocalizer loc, IReadOnlySet<string>? turnedOff = null, bool folderInput = false,
+        IPlatformServices? platform = null)
+        : this(preset, loc, turnedOff, null, folderInput, platform)
     {
     }
 
     /// <param name="visionReads">Which languages Apple Vision reads, for tests; by default what this computer's does.</param>
     internal PresetEditorViewModel(Preset preset, ILocalizer loc, IReadOnlySet<string>? turnedOff, Func<string, bool>? visionReads,
-        bool folderInput = false)
+        bool folderInput = false, IPlatformServices? platform = null)
     {
         _original = preset;
         _edit = preset.Clone();
         _loc = loc;
+        _screen = platform?.PrimaryScreen();
         FolderInput = folderInput || preset.TargetFormat == "iso";
 
         // ~150 formats in registry order, which groups them by category; the category is shown next to each name
@@ -1076,6 +1080,23 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     /// <summary>A PNG preset that renders a web page and slices it: the built-in web page presets, or one made from them.</summary>
     public bool ShowWeb => !IsTool && TargetId == "png"
         && (_edit.Web.SliceRatio.Length > 0 || _original.Id.StartsWith("web-png-", StringComparison.Ordinal));
+
+    /// <summary>This computer's primary screen is known: "use the full-screen width" can fill the width and scale.</summary>
+    public bool ShowUseScreen => _screen is not null;
+
+    /// <summary>
+    /// Fills the page width and the resolution scale from the primary screen, for a browser in full-screen at the
+    /// preset's zoom: the output then spans the screen's physical width and the first tile matches the visible area.
+    /// </summary>
+    [RelayCommand]
+    private void UseFullScreen()
+    {
+        if (_screen is not { } screen)
+            return;
+        var zoom = Math.Clamp(WebZoomPercent, 25, 300) / 100.0;
+        WebWidth = Math.Clamp((int)Math.Round(screen.Width / (screen.Scale * zoom)), WebOptions.MinWidth, WebOptions.MaxWidth);
+        WebScale = Math.Clamp(screen.Scale, WebOptions.MinScale, WebOptions.MaxScale);
+    }
     /// <summary>JPG and HEIC: a video can become a Live / Motion Photo instead of one still frame.</summary>
     public bool ShowLivePhotoChoice => !IsTool && LivePhotoKinds.Count > 1;
     /// <summary>A Live / Motion Photo is chosen and the target can be written as it: its clip options are shown.</summary>

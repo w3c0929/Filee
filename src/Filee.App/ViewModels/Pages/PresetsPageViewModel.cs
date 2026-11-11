@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using Filee.App.Services;
 using Filee.Core.Formats;
 using Filee.Core.Localization;
+using Filee.Core.Platform;
 using Filee.Core.Presets;
 using Filee.Core.Settings;
 
@@ -38,12 +39,14 @@ public sealed partial class PresetsPageViewModel : ObservableObject, IFitsWindow
     private readonly UserDataStore _store;
     private readonly ILocalizer _loc;
     private readonly WindowService _windows;
+    private readonly IPlatformServices _platform;
 
-    public PresetsPageViewModel(UserDataStore store, ILocalizer loc, WindowService windows)
+    public PresetsPageViewModel(UserDataStore store, ILocalizer loc, WindowService windows, IPlatformServices platform)
     {
         _store = store;
         _loc = loc;
         _windows = windows;
+        _platform = platform;
         VisiblePresets = new FilteredList<PresetListItem>(Presets, p => [p.Name, p.Target, p.Preset.TargetFormat]);
         var off = store.Settings.TurnedOffFieldSet();
         // Groups and tools convert nothing: they live on the donut only (Settings → Toolbar).
@@ -69,7 +72,7 @@ public sealed partial class PresetsPageViewModel : ObservableObject, IFitsWindow
 
     partial void OnSelectedPresetChanged(PresetListItem? value)
     {
-        Editor = value is null ? null : new PresetEditorViewModel(value.Preset, _loc, _store.Settings.TurnedOffFieldSet());
+        Editor = value is null ? null : new PresetEditorViewModel(value.Preset, _loc, _store.Settings.TurnedOffFieldSet(), platform: _platform);
         SavedMessage = null;
     }
 

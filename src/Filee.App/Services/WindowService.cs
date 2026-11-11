@@ -844,7 +844,8 @@ public sealed class WindowService(ILocalizer loc, IServiceProvider services, Mem
             return await EditGroupAsync(preset, owner, folderInput: folderInput);
         var dialog = new PresetEditorWindow
         {
-            DataContext = new PresetEditorViewModel(preset, loc, services.GetRequiredService<UserDataStore>().Settings.TurnedOffFieldSet(), folderInput),
+            DataContext = new PresetEditorViewModel(preset, loc, services.GetRequiredService<UserDataStore>().Settings.TurnedOffFieldSet(), folderInput,
+                services.GetRequiredService<Filee.Core.Platform.IPlatformServices>()),
             Topmost = owner?.Topmost ?? false,
         };
         PrepareWindow(dialog);

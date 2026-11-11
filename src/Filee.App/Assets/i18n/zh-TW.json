@@ -1680,5 +1680,6 @@
   "presets.web_full_page": "整頁",
   "presets.web_ratio_invalid": "請使用類似 16:9 或 2.35:1 的比例。",
   "presets.web_zoom": "網頁縮放",
-  "presets.web_zoom_hint": "頁面寬度是 CSS 版面寬度；縮放會同時放大頁面版面與輸出圖片。"
+  "presets.web_zoom_hint": "頁面寬度是 CSS 版面寬度；縮放會同時放大頁面版面與輸出圖片。",
+  "presets.web_use_screen": "使用全螢幕寬度"
 }

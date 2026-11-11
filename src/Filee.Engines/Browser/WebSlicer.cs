@@ -20,14 +20,31 @@ internal static class WebSlicer
         if (width == 0 || height == 0)
             throw new ConversionRefusedException("error.web_render_failed", "empty picture");
 
-        var blockHeight = SliceRatio.BlockHeight((int)width, ratioWidth, ratioHeight);
+        var background = BackgroundOf(options.Background);
+
+        // Whole-number ratios (16:9, 9:16, 4:3, 3:4, 1:1) can be exact to the pixel: snap the picture width by the
+        // pixel or two a fractional CSS width leaves over, so every tile is exactly the ratio.
+        var exact = SliceRatio.TryExactBlock((int)width, ratioWidth, ratioHeight, out var blockHeight, out var exactWidth);
+        if (exact && exactWidth != (int)width)
+        {
+            if (exactWidth < width)
+                page.Crop(new MagickGeometry(0, 0, (uint)exactWidth, page.Height));
+            else
+            {
+                page.BackgroundColor = background;
+                page.Extent((uint)exactWidth, page.Height, Gravity.Northwest);
+            }
+            width = (uint)exactWidth;
+        }
+        if (!exact)
+            blockHeight = SliceRatio.BlockHeight((int)width, ratioWidth, ratioHeight);
+
         var count = SliceRatio.TileCount(height, blockHeight);
         if (count > options.EffectiveMaxTiles)
             throw new ConversionRefusedException("error.web_too_many_tiles", $"{count} / {options.EffectiveMaxTiles}");
         if (count <= 0)
             return [];
 
-        var background = BackgroundOf(options.Background);
         var written = new List<string>(count);
         for (var index = 0; index < count; index++)
         {

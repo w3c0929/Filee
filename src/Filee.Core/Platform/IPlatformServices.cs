@@ -39,6 +39,12 @@ public interface IPlatformServices
     ForegroundWindowInfo? GetForegroundWindow() => null;
 
     /// <summary>
+    /// The primary screen's physical width and display scale (1 = 100%), for "use the full-screen width" in the web
+    /// slice editor. Null where the platform can't tell.
+    /// </summary>
+    (int Width, double Scale)? PrimaryScreen() => null;
+
+    /// <summary>
     /// The modifier keys held now, as the system reports them, for matching mouse gestures; null where the global hook's
     /// own event mask is right (it isn't on macOS while another app holds Secure Input, see the macOS implementation).
     /// </summary>

@@ -49,6 +49,9 @@ internal static partial class NativeMethods
     [LibraryImport("user32.dll")]
     public static partial int GetSystemMetrics(int index);
 
+    [LibraryImport("user32.dll")]
+    public static partial uint GetDpiForSystem();
+
     [LibraryImport("kernel32.dll")]
     public static partial nint GetCurrentProcess();
 

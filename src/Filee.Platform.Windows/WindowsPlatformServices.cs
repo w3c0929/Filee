@@ -82,6 +82,16 @@ public sealed class WindowsPlatformServices : IPlatformServices
         return new ForegroundWindowInfo(process, IsFileManager(NativeMethods.ClassNameOf(root), process));
     }
 
+    /// <summary>The primary screen's physical width and display scale (1 = 100%): SM_CXSCREEN and the system DPI.</summary>
+    public (int Width, double Scale)? PrimaryScreen()
+    {
+        var width = NativeMethods.GetSystemMetrics(0); // SM_CXSCREEN
+        if (width <= 0)
+            return null;
+        var dpi = NativeMethods.GetDpiForSystem();
+        return (width, dpi > 0 ? dpi / 96.0 : 1);
+    }
+
     /// <summary>True for the desktop's window classes: its icons are not among Shell.Application's windows.</summary>
     internal static bool IsDesktop(string? windowClass) => windowClass is "Progman" or "WorkerW";
 

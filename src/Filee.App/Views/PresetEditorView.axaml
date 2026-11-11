@@ -277,6 +277,7 @@
           <StackPanel Grid.Row="0" Grid.Column="2" Spacing="4">
             <TextBlock Classes="caption" Text="{DynamicResource presets.web_width}" />
             <NumericUpDown Value="{Binding WebWidth}" Minimum="320" Maximum="4096" Increment="10" FormatString="0" AutomationProperties.Name="{DynamicResource presets.web_width}" />
+            <Button Content="{DynamicResource presets.web_use_screen}" Command="{Binding UseFullScreenCommand}" IsVisible="{Binding ShowUseScreen}" HorizontalAlignment="Left" />
           </StackPanel>
           <StackPanel Grid.Row="1" Grid.Column="0" Spacing="4">
             <TextBlock Classes="caption" Text="{DynamicResource presets.web_scale}" />

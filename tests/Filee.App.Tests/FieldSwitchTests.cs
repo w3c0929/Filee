@@ -311,14 +311,14 @@ public class FieldSwitchTests
         using var f = new Fixture();
         f.Store.Settings.TurnedOffFields = ["font"];
         var off = f.Store.Settings.TurnedOffFieldSet();
-        var page = new PresetsPageViewModel(f.Store, f.Loc, AppHost.Get<WindowService>());
+        var page = new PresetsPageViewModel(f.Store, f.Loc, AppHost.Get<WindowService>(), AppHost.Get<Filee.Core.Platform.IPlatformServices>());
         Assert.All(page.Presets, p => Assert.True(FormatFields.IsShown(p.Preset.TargetFormat, off), p.Preset.Id));
         Assert.Contains(page.Presets, p => p.Preset.Id == "to-eot");
         page.Search = "woff";
         Assert.Empty(page.VisiblePresets);
         Assert.All(page.PlacePresets, p => Assert.True(FormatFields.IsShown(p.Preset.TargetFormat, off)));
         f.Store.Settings.TurnedOffFields.Clear();
-        var enabled = new PresetsPageViewModel(f.Store, f.Loc, AppHost.Get<WindowService>());
+        var enabled = new PresetsPageViewModel(f.Store, f.Loc, AppHost.Get<WindowService>(), AppHost.Get<Filee.Core.Platform.IPlatformServices>());
         Assert.Contains(enabled.Presets, p => p.Preset.Id == "to-woff2");
     }
 
@@ -328,7 +328,7 @@ public class FieldSwitchTests
         using var f = new Fixture();
         f.Store.Settings.TurnedOffFields = FormatFields.All.Where(x => x.CanTurnOff && !x.OnByDefault).Select(x => x.Id).ToList();
         var off = f.Store.Settings.TurnedOffFieldSet();
-        var page = new PresetsPageViewModel(f.Store, f.Loc, AppHost.Get<WindowService>());
+        var page = new PresetsPageViewModel(f.Store, f.Loc, AppHost.Get<WindowService>(), AppHost.Get<Filee.Core.Platform.IPlatformServices>());
         page.SelectedPreset = page.Presets.Single(p => p.Preset.Id == "to-png");
         var window = new PresetEditorWindow { DataContext = page.Editor, Height = 900 };
         window.Show();

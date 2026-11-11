@@ -35,4 +35,27 @@ public static class SliceRatio
     /// <summary>How many tiles <paramref name="pixelHeight"/> pixels make.</summary>
     public static int TileCount(int pixelHeight, int blockHeight) =>
         blockHeight <= 0 ? 0 : (pixelHeight + blockHeight - 1) / blockHeight;
+
+    /// <summary>
+    /// A block height and width that make the ratio exact to the pixel, when both sides are whole numbers: the height
+    /// is a multiple of <paramref name="width"/>'s height side and the width follows from it. The caller crops or pads
+    /// the picture to <paramref name="exactWidth"/> (usually by a pixel or two).
+    /// </summary>
+    public static bool TryExactBlock(int pixelWidth, decimal width, decimal height, out int blockHeight, out int exactWidth)
+    {
+        blockHeight = exactWidth = 0;
+        if (width != decimal.Truncate(width) || height != decimal.Truncate(height) || width <= 0 || height <= 0)
+            return false;
+
+        var w = (int)width;
+        var h = (int)height;
+        var block = Math.Max(1, (int)decimal.Round(pixelWidth * height / width, 0, MidpointRounding.AwayFromZero));
+        // The width is exact when the height is a multiple of the ratio's height side.
+        block = Math.Max(h, (int)Math.Round((double)block / h, MidpointRounding.AwayFromZero) * h);
+        exactWidth = block / h * w;
+        if (exactWidth <= 0)
+            return false;
+        blockHeight = block;
+        return true;
+    }
 }

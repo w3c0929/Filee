@@ -38,6 +38,23 @@ public class SliceRatioTests
         Assert.Equal(expected, SliceRatio.BlockHeight(width, ratioWidth, ratioHeight));
 
     [Theory]
+    [InlineData(2561, 16, 9, 1440, 2560)]
+    [InlineData(2561, 4, 3, 1920, 2560)]
+    [InlineData(1440, 9, 16, 2560, 1440)]
+    [InlineData(2561, 3, 4, 3416, 2562)]
+    [InlineData(2561, 1, 1, 2561, 2561)]
+    public void Exact_blocks_snap_the_width_to_the_ratio(int width, int ratioWidth, int ratioHeight, int block, int exact)
+    {
+        Assert.True(SliceRatio.TryExactBlock(width, ratioWidth, ratioHeight, out var actualBlock, out var actualWidth));
+        Assert.Equal(block, actualBlock);
+        Assert.Equal(exact, actualWidth);
+    }
+
+    [Fact]
+    public void Decimal_ratios_have_no_exact_block() =>
+        Assert.False(SliceRatio.TryExactBlock(2561, 2.35m, 1m, out _, out _));
+
+    [Theory]
     [InlineData(2000, 810, 3)]
     [InlineData(810, 810, 1)]
     [InlineData(0, 810, 0)]

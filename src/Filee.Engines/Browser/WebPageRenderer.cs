@@ -40,15 +40,10 @@ internal static class WebPageRenderer
         await cdp.ConnectAsync(pageUri, cancellationToken).ConfigureAwait(false);
         await cdp.SendAsync("Page.enable", null, CommandTimeout, cancellationToken).ConfigureAwait(false);
 
-        // Page zoom: lay the page out at viewportWidth / zoom CSS pixels and render each CSS pixel at
-        // deviceScale × zoom, so the output width stays viewportWidth × deviceScale while the content is zoomed.
-        // Round the CSS layout width first and derive the device scale from it: the output is then exactly
-        // viewportWidth × deviceScale (no 1-pixel drift from 2560 / 1.5), and the layout zoom stays as close
-        // to the chosen zoom as whole CSS pixels allow.
-        var zoom = options.EffectiveZoom;
-        var targetWidth = options.EffectiveWidth * options.EffectiveScale;
-        var layoutWidth = Math.Max(1, (int)Math.Round(targetWidth / (options.EffectiveScale * zoom)));
-        var scale = targetWidth / layoutWidth;
+        // Page width is a CSS layout width; page zoom scales both that layout and the output, as a browser's
+        // zoom does: a 1152 CSS page at 150% is 1728 physical px wide.
+        var layoutWidth = options.EffectiveWidth;
+        var scale = options.EffectiveScale * options.EffectiveZoom;
         await cdp.SendAsync("Emulation.setDeviceMetricsOverride", new
         {
             width = layoutWidth,

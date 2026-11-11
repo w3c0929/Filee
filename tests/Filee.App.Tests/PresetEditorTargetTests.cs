@@ -60,7 +60,7 @@ public class PresetEditorTargetTests
 
         editor.WebScale = 2;
         editor.WebZoomPercent = 125;
-        Assert.Equal(2880, editor.WebOutputWidth);
+        Assert.Equal(3600, editor.WebOutputWidth);
         Assert.True(editor.Apply());
         Assert.Equal(2, preset.Web.DeviceScale);
         Assert.Equal(1.25, preset.Web.PageZoom);

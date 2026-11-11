@@ -1680,5 +1680,5 @@
   "presets.web_full_page": "Whole page",
   "presets.web_ratio_invalid": "Use a ratio like 16:9 or 2.35:1.",
   "presets.web_zoom": "Page zoom",
-  "presets.web_zoom_hint": "The page is laid out at this zoom before the picture is taken; the output width stays the same."
+  "presets.web_zoom_hint": "The page width is a CSS layout width; the zoom scales both the layout and the output."
 }

@@ -772,7 +772,9 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(WebOutputWidth), nameof(WebOutputLabel))]
     private double _webScale = 1;
-    [ObservableProperty] private int _webZoomPercent = 100;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(WebOutputWidth), nameof(WebOutputLabel))]
+    private int _webZoomPercent = 100;
     [ObservableProperty] private string _webBackground = "#FFFFFF";
     [ObservableProperty] private int _webMaxTiles = 40;
     [ObservableProperty] private int _webWaitMs = 300;
@@ -1198,10 +1200,11 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     public string? NameError => string.IsNullOrWhiteSpace(Name) ? _loc["presets.name_required"] : null;
     public bool IsValid => NameError is null && SizeRangeError is null && DestinationError is null && CustomSizeError is null && WebRatioError is null;
 
-    /// <summary>The output pixel width of a web page slice: the CSS width times the resolution scale.</summary>
+    /// <summary>The output pixel width of a web page slice: CSS width × resolution scale × page zoom.</summary>
     public int WebOutputWidth => (int)Math.Round(
         Math.Clamp(WebWidth, WebOptions.MinWidth, WebOptions.MaxWidth)
-        * (double.IsFinite(WebScale) ? Math.Clamp(WebScale, WebOptions.MinScale, WebOptions.MaxScale) : 1));
+        * (double.IsFinite(WebScale) ? Math.Clamp(WebScale, WebOptions.MinScale, WebOptions.MaxScale) : 1)
+        * (Math.Clamp(WebZoomPercent, 25, 300) / 100.0));
     public string WebOutputLabel => $"{WebOutputWidth} px";
     public string? WebRatioError => ShowWeb && !SliceRatio.TryParse(WebRatio, out _, out _)
         ? _loc["presets.web_ratio_invalid"] : null;

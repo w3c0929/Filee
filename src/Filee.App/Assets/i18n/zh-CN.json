@@ -1667,5 +1667,16 @@
   "error.web_too_many_tiles": "该页面会切成过多图片（{0}）。",
   "error.web_page_too_large": "页面过大，无法渲染（{0}）。",
   "error.web_load_failed": "网页加载失败：{0}",
-  "error.web_render_failed": "浏览器渲染失败：{0}"
+  "error.web_render_failed": "浏览器渲染失败：{0}",
+  "presets.web_slice_hint": "用真实浏览器渲染整页，再按该比例切成多张图片。",
+  "presets.web_output_width": "输出宽度",
+  "presets.web_slice": "网页切片",
+  "presets.web_ratio": "切片比例",
+  "presets.web_width": "页面宽度（CSS 像素）",
+  "presets.web_scale": "清晰度倍数",
+  "presets.web_background": "补白颜色",
+  "presets.web_max_tiles": "最大张数",
+  "presets.web_wait_ms": "额外等待（毫秒）",
+  "presets.web_full_page": "整页",
+  "presets.web_ratio_invalid": "请使用类似 16:9 或 2.35:1 的比例。"
 }

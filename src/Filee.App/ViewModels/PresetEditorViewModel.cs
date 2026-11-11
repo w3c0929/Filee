@@ -330,6 +330,13 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         _webpLossless = _edit.Image.WebpLossless;
         _multiPageTiff = _edit.Image.MultiPageTiff;
         _icoSizes = string.Join(", ", _edit.Image.IcoSizes);
+        _webRatio = _edit.Web.SliceRatio;
+        _webWidth = _edit.Web.EffectiveWidth;
+        _webScale = _edit.Web.EffectiveScale;
+        _webBackground = _edit.Web.Background;
+        _webMaxTiles = _edit.Web.EffectiveMaxTiles;
+        _webWaitMs = _edit.Web.EffectiveWaitMs;
+        _webFullPage = _edit.Web.FullPage;
         _merge = _edit.Pdf.MergeIntoSingle;
         _marginMm = _edit.Pdf.MarginMm;
         _renderDpi = _edit.Pdf.RenderDpi;
@@ -476,7 +483,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     private string _name;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ShowImage), nameof(ShowTurnForPdf), nameof(ShowQuality), nameof(ShowTiff), nameof(ShowMultiPageTiff), nameof(ShowWebp), nameof(ShowIco),
+    [NotifyPropertyChangedFor(nameof(ShowImage), nameof(ShowWeb), nameof(ShowTurnForPdf), nameof(ShowQuality), nameof(ShowTiff), nameof(ShowMultiPageTiff), nameof(ShowWebp), nameof(ShowIco),
         nameof(ShowFitsTiff), nameof(ShowFitsDebayer),
         nameof(ShowZipResult), nameof(ShowPdf), nameof(ShowPdfBuild), nameof(ShowDocument), nameof(ShowLeaveOutPictures), nameof(ShowPdfSplit), nameof(ShowPageGroups), nameof(ShowPdfCombine),
         nameof(ShowAskPages), nameof(ShowAskPagesHint),
@@ -753,6 +760,21 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     [ObservableProperty] private bool _webpLossless;
     [ObservableProperty] private bool _multiPageTiff;
     [ObservableProperty] private string _icoSizes;
+
+    // Web page slices: the page is rendered by a real browser (WebOptions), then cut into ratio tiles.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(WebOutputWidth), nameof(WebOutputLabel), nameof(WebRatioError), nameof(IsValid))]
+    private string _webRatio = "";
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(WebOutputWidth), nameof(WebOutputLabel))]
+    private int _webWidth = 1440;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(WebOutputWidth), nameof(WebOutputLabel))]
+    private double _webScale = 1;
+    [ObservableProperty] private string _webBackground = "#FFFFFF";
+    [ObservableProperty] private int _webMaxTiles = 40;
+    [ObservableProperty] private int _webWaitMs = 300;
+    [ObservableProperty] private bool _webFullPage = true;
     [ObservableProperty, NotifyPropertyChangedFor(nameof(ShowAskPages), nameof(ShowAskPagesHint))]
     private bool _merge;
     [ObservableProperty] private double _marginMm;
@@ -1047,6 +1069,9 @@ public sealed partial class PresetEditorViewModel : ObservableObject
 
     /// <summary>A tool (Crop) keeps the source as it is: none of the image options apply.</summary>
     public bool ShowImage => !IsTool && TargetIsImage && !IsLivePhoto;
+    /// <summary>A PNG preset that renders a web page and slices it: the built-in web page presets, or one made from them.</summary>
+    public bool ShowWeb => !IsTool && TargetId == "png"
+        && (_edit.Web.SliceRatio.Length > 0 || _original.Id.StartsWith("web-png-", StringComparison.Ordinal));
     /// <summary>JPG and HEIC: a video can become a Live / Motion Photo instead of one still frame.</summary>
     public bool ShowLivePhotoChoice => !IsTool && LivePhotoKinds.Count > 1;
     /// <summary>A Live / Motion Photo is chosen and the target can be written as it: its clip options are shown.</summary>
@@ -1169,7 +1194,15 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     private static double SizeLimit(decimal? megabytes) => (double)Math.Clamp(megabytes ?? 0, 0, 4096);
 
     public string? NameError => string.IsNullOrWhiteSpace(Name) ? _loc["presets.name_required"] : null;
-    public bool IsValid => NameError is null && SizeRangeError is null && DestinationError is null && CustomSizeError is null;
+    public bool IsValid => NameError is null && SizeRangeError is null && DestinationError is null && CustomSizeError is null && WebRatioError is null;
+
+    /// <summary>The output pixel width of a web page slice: the CSS width times the resolution scale.</summary>
+    public int WebOutputWidth => (int)Math.Round(
+        Math.Clamp(WebWidth, WebOptions.MinWidth, WebOptions.MaxWidth)
+        * (double.IsFinite(WebScale) ? Math.Clamp(WebScale, WebOptions.MinScale, WebOptions.MaxScale) : 1));
+    public string WebOutputLabel => $"{WebOutputWidth} px";
+    public string? WebRatioError => ShowWeb && !SliceRatio.TryParse(WebRatio, out _, out _)
+        ? _loc["presets.web_ratio_invalid"] : null;
 
     /// <summary>
     /// The width × height boxes, while shown: a stretch needs both sides, a box that keeps the aspect at least one.
@@ -1255,6 +1288,19 @@ public sealed partial class PresetEditorViewModel : ObservableObject
             image.IcoSizes = [256, 48, 32, 16];
         // Only where the option is shown: a speed chosen for GIF and left behind by a JPG target saves nothing.
         image.AnimationSpeed = ShowAnimationSpeed ? AnimationSpeed.Value : 1;
+
+        if (ShowWeb)
+        {
+            var web = _original.Web;
+            if (SliceRatio.TryParse(WebRatio, out _, out _))
+                web.SliceRatio = WebRatio.Trim();
+            web.ViewportWidth = Math.Clamp(WebWidth, WebOptions.MinWidth, WebOptions.MaxWidth);
+            web.DeviceScale = double.IsFinite(WebScale) ? Math.Clamp(WebScale, WebOptions.MinScale, WebOptions.MaxScale) : 1;
+            web.Background = string.IsNullOrWhiteSpace(WebBackground) ? "#FFFFFF" : WebBackground.Trim();
+            web.MaxTiles = Math.Clamp(WebMaxTiles, 1, WebOptions.MaxTilesLimit);
+            web.ScriptWaitMs = Math.Clamp(WebWaitMs, 0, WebOptions.MaxWaitMs);
+            web.FullPage = WebFullPage;
+        }
 
         var pdf = _original.Pdf;
         pdf.MergeIntoSingle = Merge;

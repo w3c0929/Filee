@@ -264,6 +264,50 @@
       </StackPanel>
     </Border>
 
+    <!-- Web page slices: a real browser renders the page, then it is cut into pictures of one ratio -->
+    <Border x:Name="WebCard" Classes="card" IsVisible="{Binding ShowWeb}" Padding="14">
+      <StackPanel Spacing="10">
+        <TextBlock Classes="h2" Text="{DynamicResource presets.web_slice}" />
+        <TextBlock Classes="caption" TextWrapping="Wrap" Text="{DynamicResource presets.web_slice_hint}" />
+        <Grid ColumnDefinitions="*,12,*" RowDefinitions="Auto,Auto" RowSpacing="8">
+          <StackPanel Grid.Row="0" Grid.Column="0" Spacing="4">
+            <TextBlock Classes="caption" Text="{DynamicResource presets.web_ratio}" />
+            <TextBox Text="{Binding WebRatio}" PlaceholderText="16:9" AutomationProperties.Name="{DynamicResource presets.web_ratio}" />
+          </StackPanel>
+          <StackPanel Grid.Row="0" Grid.Column="2" Spacing="4">
+            <TextBlock Classes="caption" Text="{DynamicResource presets.web_width}" />
+            <NumericUpDown Value="{Binding WebWidth}" Minimum="320" Maximum="4096" Increment="10" FormatString="0" AutomationProperties.Name="{DynamicResource presets.web_width}" />
+          </StackPanel>
+          <StackPanel Grid.Row="1" Grid.Column="0" Spacing="4">
+            <TextBlock Classes="caption" Text="{DynamicResource presets.web_scale}" />
+            <NumericUpDown Value="{Binding WebScale}" Minimum="0.5" Maximum="4" Increment="0.5" FormatString="0.##" AutomationProperties.Name="{DynamicResource presets.web_scale}" />
+          </StackPanel>
+          <StackPanel Grid.Row="1" Grid.Column="2" Spacing="4">
+            <TextBlock Classes="caption" Text="{DynamicResource presets.web_output_width}" />
+            <TextBlock Text="{Binding WebOutputLabel}" FontWeight="SemiBold" />
+          </StackPanel>
+        </Grid>
+        <TextBlock Classes="caption danger" Text="{Binding WebRatioError}" IsVisible="{Binding WebRatioError, Converter={x:Static ObjectConverters.IsNotNull}}" />
+        <Grid ColumnDefinitions="*,12,*">
+          <StackPanel Grid.Column="0" Spacing="4">
+            <TextBlock Classes="caption" Text="{DynamicResource presets.web_background}" />
+            <TextBox Text="{Binding WebBackground}" PlaceholderText="#FFFFFF" AutomationProperties.Name="{DynamicResource presets.web_background}" />
+          </StackPanel>
+          <StackPanel Grid.Column="2" Spacing="4">
+            <TextBlock Classes="caption" Text="{DynamicResource presets.web_max_tiles}" />
+            <NumericUpDown Value="{Binding WebMaxTiles}" Minimum="1" Maximum="200" Increment="1" FormatString="0" AutomationProperties.Name="{DynamicResource presets.web_max_tiles}" />
+          </StackPanel>
+        </Grid>
+        <Grid ColumnDefinitions="*,12,*">
+          <StackPanel Grid.Column="0" Spacing="4">
+            <TextBlock Classes="caption" Text="{DynamicResource presets.web_wait_ms}" />
+            <NumericUpDown Value="{Binding WebWaitMs}" Minimum="0" Maximum="15000" Increment="100" FormatString="0" AutomationProperties.Name="{DynamicResource presets.web_wait_ms}" />
+          </StackPanel>
+          <CheckBox Grid.Column="2" VerticalAlignment="Bottom" Content="{DynamicResource presets.web_full_page}" IsChecked="{Binding WebFullPage}" />
+        </Grid>
+      </StackPanel>
+    </Border>
+
     <!-- Translation options -->
     <Border x:Name="TranslateCard" Classes="card" IsVisible="{Binding ShowTranslate}" Padding="14">
       <StackPanel Spacing="10">

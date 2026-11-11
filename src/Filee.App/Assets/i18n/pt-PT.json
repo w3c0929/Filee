@@ -1667,5 +1667,16 @@
   "error.web_too_many_tiles": "The page would make too many pictures ({0}).",
   "error.web_page_too_large": "The page is too large to render ({0}).",
   "error.web_load_failed": "The page could not be loaded: {0}",
-  "error.web_render_failed": "The browser could not render the page: {0}"
+  "error.web_render_failed": "The browser could not render the page: {0}",
+  "presets.web_slice_hint": "Rendered by a real browser, then cut into pictures of this ratio.",
+  "presets.web_output_width": "Output width",
+  "presets.web_slice": "Web page slices",
+  "presets.web_ratio": "Slice ratio",
+  "presets.web_width": "Page width (CSS px)",
+  "presets.web_scale": "Resolution scale",
+  "presets.web_background": "Padding colour",
+  "presets.web_max_tiles": "Max pictures",
+  "presets.web_wait_ms": "Extra wait (ms)",
+  "presets.web_full_page": "Whole page",
+  "presets.web_ratio_invalid": "Use a ratio like 16:9 or 2.35:1."
 }

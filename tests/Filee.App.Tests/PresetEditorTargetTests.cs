@@ -42,4 +42,31 @@ public class PresetEditorTargetTests
             window.Close();
         }
     }
+
+    [AvaloniaFact]
+    public void Web_slices_show_and_save_the_page_width_and_resolution_scale()
+    {
+        TestServices.EnsureInitialized("en");
+        var store = AppHost.Get<UserDataStore>();
+        var preset = store.FindPreset("web-png-16-9")!.Clone();
+        var editor = new PresetEditorViewModel(preset, AppHost.Get<ILocalizer>());
+
+        Assert.True(editor.ShowWeb);
+        Assert.Equal("16:9", editor.WebRatio);
+        Assert.Equal(1440, editor.WebWidth);
+        Assert.Equal(1440, editor.WebOutputWidth);
+        Assert.Null(editor.WebRatioError);
+
+        editor.WebScale = 2;
+        Assert.Equal(2880, editor.WebOutputWidth);
+        Assert.True(editor.Apply());
+        Assert.Equal(2, preset.Web.DeviceScale);
+        Assert.Equal(1440, preset.Web.ViewportWidth);
+
+        // A plain PNG preset has no web card, and an invalid ratio blocks the save.
+        Assert.False(new PresetEditorViewModel(store.FindPreset("to-png")!.Clone(), AppHost.Get<ILocalizer>()).ShowWeb);
+        editor.WebRatio = "nonsense";
+        Assert.NotNull(editor.WebRatioError);
+        Assert.False(editor.Apply());
+    }
 }

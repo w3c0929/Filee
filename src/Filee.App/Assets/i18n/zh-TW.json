@@ -1667,5 +1667,16 @@
   "error.web_too_many_tiles": "該頁面會切成過多圖片（{0}）。",
   "error.web_page_too_large": "頁面過大，無法渲染（{0}）。",
   "error.web_load_failed": "網頁載入失敗：{0}",
-  "error.web_render_failed": "瀏覽器渲染失敗：{0}"
+  "error.web_render_failed": "瀏覽器渲染失敗：{0}",
+  "presets.web_slice_hint": "用真實瀏覽器渲染整頁，再按該比例切成多張圖片。",
+  "presets.web_output_width": "輸出寬度",
+  "presets.web_slice": "網頁切片",
+  "presets.web_ratio": "切片比例",
+  "presets.web_width": "頁面寬度（CSS 像素）",
+  "presets.web_scale": "清晰度倍數",
+  "presets.web_background": "補白顏色",
+  "presets.web_max_tiles": "最大張數",
+  "presets.web_wait_ms": "額外等待（毫秒）",
+  "presets.web_full_page": "整頁",
+  "presets.web_ratio_invalid": "請使用類似 16:9 或 2.35:1 的比例。"
 }

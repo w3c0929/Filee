@@ -40,15 +40,18 @@ internal static class WebPageRenderer
         await cdp.ConnectAsync(pageUri, cancellationToken).ConfigureAwait(false);
         await cdp.SendAsync("Page.enable", null, CommandTimeout, cancellationToken).ConfigureAwait(false);
 
-        var width = options.EffectiveWidth;
-        var scale = options.EffectiveScale;
+        // Page zoom: lay the page out at viewportWidth / zoom CSS pixels and render each CSS pixel at
+        // deviceScale × zoom, so the output width stays viewportWidth × deviceScale while the content is zoomed.
+        var zoom = options.EffectiveZoom;
+        var layoutWidth = Math.Max(1, (int)Math.Round(options.EffectiveWidth / zoom));
+        var scale = options.EffectiveScale * zoom;
         await cdp.SendAsync("Emulation.setDeviceMetricsOverride", new
         {
-            width,
+            width = layoutWidth,
             height = 900,
             deviceScaleFactor = scale,
             mobile = false,
-            screenWidth = width,
+            screenWidth = layoutWidth,
             screenHeight = 900,
         }, CommandTimeout, cancellationToken).ConfigureAwait(false);
 
@@ -72,10 +75,10 @@ internal static class WebPageRenderer
             ? await MeasureHeightAsync(cdp, cancellationToken).ConfigureAwait(false)
             : 900;
 
-        if (width * height * scale * scale > MaxPagePixels)
+        if (layoutWidth * height * scale * scale > MaxPagePixels)
         {
             throw new ConversionRefusedException("error.web_page_too_large",
-                $"{width}×{height} @{scale:0.##}×");
+                $"{layoutWidth}×{height} @{scale:0.##}×");
         }
 
         var screenshot = await cdp.SendAsync("Page.captureScreenshot", new
@@ -83,7 +86,7 @@ internal static class WebPageRenderer
             format = "png",
             fromSurface = true,
             captureBeyondViewport = true,
-            clip = new { x = 0, y = 0, width, height, scale = 1 },
+            clip = new { x = 0, y = 0, width = layoutWidth, height, scale = 1 },
         }, ScreenshotTimeout, cancellationToken).ConfigureAwait(false);
 
         var data = screenshot.GetProperty("data").GetString()

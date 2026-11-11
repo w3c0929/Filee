@@ -1678,5 +1678,7 @@
   "presets.web_max_tiles": "最大张数",
   "presets.web_wait_ms": "额外等待（毫秒）",
   "presets.web_full_page": "整页",
-  "presets.web_ratio_invalid": "请使用类似 16:9 或 2.35:1 的比例。"
+  "presets.web_ratio_invalid": "请使用类似 16:9 或 2.35:1 的比例。",
+  "presets.web_zoom": "网页缩放",
+  "presets.web_zoom_hint": "截图前先按此比例缩放网页布局；输出宽度保持不变。"
 }

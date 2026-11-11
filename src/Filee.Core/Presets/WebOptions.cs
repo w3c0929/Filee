@@ -17,6 +17,13 @@ public sealed class WebOptions
     /// <summary>Device pixel ratio: 1 writes one output pixel per CSS pixel, 2 doubles the resolution.</summary>
     public double DeviceScale { get; set; } = 1;
 
+    /// <summary>
+    /// Page zoom (1 = 100%): the browser lays the page out at <see cref="ViewportWidth"/> / this scale, so 80% fits
+    /// more of the page and 125% makes text larger. Applied before measuring and slicing; the output width stays
+    /// <see cref="ViewportWidth"/> × <see cref="DeviceScale"/>.
+    /// </summary>
+    public double PageZoom { get; set; } = 1;
+
     /// <summary>Colour ("#RRGGBB") of the strip that pads the last tile to the exact ratio.</summary>
     public string Background { get; set; } = "#FFFFFF";
 
@@ -35,6 +42,8 @@ public sealed class WebOptions
     public const int MaxWidth = 4096;
     public const double MinScale = 0.5;
     public const double MaxScale = 4;
+    public const double MinZoom = 0.25;
+    public const double MaxZoom = 3;
     public const int MaxWaitMs = 15000;
 
     [JsonIgnore]
@@ -46,6 +55,10 @@ public sealed class WebOptions
     [JsonIgnore]
     public double EffectiveScale =>
         double.IsFinite(DeviceScale) ? Math.Clamp(DeviceScale, MinScale, MaxScale) : 1;
+
+    [JsonIgnore]
+    public double EffectiveZoom =>
+        double.IsFinite(PageZoom) ? Math.Clamp(PageZoom, MinZoom, MaxZoom) : 1;
 
     [JsonIgnore]
     public int EffectiveWaitMs => Math.Clamp(ScriptWaitMs, 0, MaxWaitMs);

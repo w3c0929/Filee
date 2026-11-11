@@ -1678,5 +1678,7 @@
   "presets.web_max_tiles": "Max pictures",
   "presets.web_wait_ms": "Extra wait (ms)",
   "presets.web_full_page": "Whole page",
-  "presets.web_ratio_invalid": "Use a ratio like 16:9 or 2.35:1."
+  "presets.web_ratio_invalid": "Use a ratio like 16:9 or 2.35:1.",
+  "presets.web_zoom": "Page zoom",
+  "presets.web_zoom_hint": "The page is laid out at this zoom before the picture is taken; the output width stays the same."
 }

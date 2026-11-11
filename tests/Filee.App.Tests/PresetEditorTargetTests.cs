@@ -55,12 +55,15 @@ public class PresetEditorTargetTests
         Assert.Equal("16:9", editor.WebRatio);
         Assert.Equal(1440, editor.WebWidth);
         Assert.Equal(1440, editor.WebOutputWidth);
+        Assert.Equal(100, editor.WebZoomPercent);
         Assert.Null(editor.WebRatioError);
 
         editor.WebScale = 2;
+        editor.WebZoomPercent = 125;
         Assert.Equal(2880, editor.WebOutputWidth);
         Assert.True(editor.Apply());
         Assert.Equal(2, preset.Web.DeviceScale);
+        Assert.Equal(1.25, preset.Web.PageZoom);
         Assert.Equal(1440, preset.Web.ViewportWidth);
 
         // A plain PNG preset has no web card, and an invalid ratio blocks the save.

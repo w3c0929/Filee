@@ -283,10 +283,15 @@
             <NumericUpDown Value="{Binding WebScale}" Minimum="0.5" Maximum="4" Increment="0.5" FormatString="0.##" AutomationProperties.Name="{DynamicResource presets.web_scale}" />
           </StackPanel>
           <StackPanel Grid.Row="1" Grid.Column="2" Spacing="4">
-            <TextBlock Classes="caption" Text="{DynamicResource presets.web_output_width}" />
-            <TextBlock Text="{Binding WebOutputLabel}" FontWeight="SemiBold" />
+            <TextBlock Classes="caption" Text="{DynamicResource presets.web_zoom}" />
+            <NumericUpDown Value="{Binding WebZoomPercent}" Minimum="25" Maximum="300" Increment="5" FormatString="0'%'" AutomationProperties.Name="{DynamicResource presets.web_zoom}" />
           </StackPanel>
         </Grid>
+        <StackPanel Spacing="2">
+          <TextBlock Classes="caption" Text="{DynamicResource presets.web_output_width}" />
+          <TextBlock Text="{Binding WebOutputLabel}" FontWeight="SemiBold" />
+          <TextBlock Classes="caption" TextWrapping="Wrap" Text="{DynamicResource presets.web_zoom_hint}" />
+        </StackPanel>
         <TextBlock Classes="caption danger" Text="{Binding WebRatioError}" IsVisible="{Binding WebRatioError, Converter={x:Static ObjectConverters.IsNotNull}}" />
         <Grid ColumnDefinitions="*,12,*">
           <StackPanel Grid.Column="0" Spacing="4">

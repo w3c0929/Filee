@@ -333,6 +333,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         _webRatio = _edit.Web.SliceRatio;
         _webWidth = _edit.Web.EffectiveWidth;
         _webScale = _edit.Web.EffectiveScale;
+        _webZoomPercent = (int)Math.Round(_edit.Web.EffectiveZoom * 100);
         _webBackground = _edit.Web.Background;
         _webMaxTiles = _edit.Web.EffectiveMaxTiles;
         _webWaitMs = _edit.Web.EffectiveWaitMs;
@@ -771,6 +772,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(WebOutputWidth), nameof(WebOutputLabel))]
     private double _webScale = 1;
+    [ObservableProperty] private int _webZoomPercent = 100;
     [ObservableProperty] private string _webBackground = "#FFFFFF";
     [ObservableProperty] private int _webMaxTiles = 40;
     [ObservableProperty] private int _webWaitMs = 300;
@@ -1296,6 +1298,7 @@ public sealed partial class PresetEditorViewModel : ObservableObject
                 web.SliceRatio = WebRatio.Trim();
             web.ViewportWidth = Math.Clamp(WebWidth, WebOptions.MinWidth, WebOptions.MaxWidth);
             web.DeviceScale = double.IsFinite(WebScale) ? Math.Clamp(WebScale, WebOptions.MinScale, WebOptions.MaxScale) : 1;
+            web.PageZoom = Math.Clamp(WebZoomPercent, 25, 300) / 100.0;
             web.Background = string.IsNullOrWhiteSpace(WebBackground) ? "#FFFFFF" : WebBackground.Trim();
             web.MaxTiles = Math.Clamp(WebMaxTiles, 1, WebOptions.MaxTilesLimit);
             web.ScriptWaitMs = Math.Clamp(WebWaitMs, 0, WebOptions.MaxWaitMs);

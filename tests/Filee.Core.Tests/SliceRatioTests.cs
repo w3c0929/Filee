@@ -15,8 +15,9 @@ public class SliceRatioTests
     public void Parses_decimals_and_integers(string text, double width, double height)
     {
         Assert.True(SliceRatio.TryParse(text, out var parsedWidth, out var parsedHeight));
-        Assert.Equal((decimal)width, parsedWidth);
-        Assert.Equal((decimal)height, parsedHeight);
+        // The sides are decimals; the inline data is a double, so compare at a precision that ignores its rounding.
+        Assert.Equal(width, (double)parsedWidth, 10);
+        Assert.Equal(height, (double)parsedHeight, 10);
     }
 
     [Theory]

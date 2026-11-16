@@ -73,6 +73,7 @@ public static class EngineRegistry
         new Upscale.UpscalerConverter(),
         new FfmpegConverter(loggers?.CreateLogger<FfmpegConverter>()),
         new CadConverter(),
+        new Gcode.GcodeConverter(loggers?.CreateLogger<Gcode.GcodeConverter>()),
         new ModelConverter(),
         new ImageTo3DConverter(),
         new GeoConverter(),
@@ -83,6 +84,7 @@ public static class EngineRegistry
         new TesseractConverter(),
         new CalibreConverter(),
         new BrowserHtmlConverter(),
+        new WeasyPrintConverter(),
         new LibreOfficeConverter(env, loggers?.CreateLogger<LibreOfficeConverter>()),
     ];
 

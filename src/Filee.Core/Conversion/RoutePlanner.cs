@@ -196,6 +196,7 @@ public sealed class RoutePlanner
                     || edge.WebPage
                     || (edge.ImageSourcesOnly && !imageSource) || (edge.NotForImageSources && imageSource)
                     || (edge.Unshaped && shaping)
+                    || (edge.Sources is { } sources && !sources.Contains(from))
                     || (edge.DirectOnly && (node != from || edge.To != to)))
                     continue;
                 var next = cost + edgeCost;
@@ -230,6 +231,10 @@ public sealed class RoutePlanner
         bool metadata = false, bool upscale = false, bool webPage = false) =>
         Plan(from, to, frames, motionPhoto: motionPhoto, livePhoto: livePhoto, ocr: ocr, caption: caption, translate: translate, metadata: metadata, upscale: upscale,
             webPage: webPage) is not null;
+
+    /// <summary>The engine <paramref name="converterId"/> is among those planned over, for work it does outside a route (PDF/A).</summary>
+    public bool Includes(string converterId) =>
+        _edgesFrom.Values.Any(edges => edges.Any(e => e.Converter.Id == converterId));
 
     /// <summary>
     /// The route for an envelope (<see cref="IEnvelopeOpener"/>): the cheapest edge from <paramref name="from"/> to the

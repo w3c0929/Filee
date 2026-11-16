@@ -202,5 +202,6 @@ internal static partial class SliceIcons
         ["tool-upscale"] = "arrow-expand-all",
         ["pdf-nup"] = "book-open-variant",
         ["crop-video"] = "crop-landscape",
+        ["web-slice"] = "language-html5", // the web page donut's "slice to a ratio" group
     };
 }
